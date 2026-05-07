@@ -4,7 +4,7 @@ const courseData = [
   {
     courseCategory: "Mathematics",
     records: [
-      { school: "WLSA", courseName: "Calculus BC", male: 19, female: 12, grade: "10", system: "AP", classCount: 2 },
+      { school: "WLSA", courseName: "Calculus BC", male: 19, female: 12, grade: "10", system: "AP", classCount: 2, noteKey: "wlsaPlacementSystem" },
     ],
   },
   {
@@ -30,7 +30,7 @@ const courseData = [
   {
     courseCategory: "Physics",
     records: [
-      { school: "WLSA", courseName: "AP Physics", male: 41, female: 14, grade: "10", system: "AP", classCount: 2 },
+      { school: "WLSA", courseName: "AP Physics 1", male: 41, female: 14, grade: "10", system: "AP", classCount: 2, noteKey: "wlsaPlacementSystem" },
     ],
   },
   {
@@ -63,9 +63,16 @@ const courseData = [
 const navItems = [
   { id: "intro", labelKey: "navIntro" },
   { id: "data", labelKey: "navData" },
+  { id: "news", labelKey: "navNews" },
   { id: "simulator", labelKey: "navSimulator" },
   { id: "feedback", labelKey: "navFeedback" },
 ];
+
+const genderAvatarIcons = {
+  female: "/gender-icons/female-avatar.png",
+  male: "/gender-icons/male-avatar.png",
+  nonBinary: "/gender-icons/nonbinary-avatar.png",
+};
 
 const translations = {
   en: {
@@ -74,6 +81,7 @@ const translations = {
     siteSubtitle: "Gender Bias in Course Selection",
     navIntro: "Project Introduction",
     navData: "Data Display",
+    navNews: "News Evidence",
     navSimulator: "Bias Simulator",
     navFeedback: "Feedback",
     welcome: "Welcome",
@@ -140,6 +148,113 @@ const translations = {
     datasetLimitationTitle: "How to interpret this dataset carefully",
     datasetLimitationDesc:
       "This dataset is based on selected elective courses from several international schools. It does not include all courses, all grades, or all students. Therefore, the data should not be interpreted as final proof of gender bias. Instead, it should be used as exploratory evidence to identify possible patterns and raise better questions.",
+    newsLabel: "News & Research Evidence",
+    newsTitle: "10 cases showing how gender stereotypes shape education choices",
+    newsDesc:
+      "These cases were selected from the news and studies provided by the project list. Each row summarizes the phenomenon, the result, and a source link when a reliable link could be found.",
+    newsSourceLink: "Read source",
+    newsItems: [
+      {
+        title: "Brown University study",
+        tag: "United States · 2025",
+        summary:
+          "First-year students tended to implicitly associate men with STEM and women with humanities.",
+        result:
+          "The study links stronger implicit stereotypes to intended majors and observed STEM course-taking.",
+        source: "ERIC / working paper",
+        href: "https://eric.ed.gov/default.aspx?id=ED674056",
+      },
+      {
+        title: "Junior high students in Japan",
+        tag: "Japan · 2025",
+        summary:
+          "Boys were more likely to see themselves as STEM-type students, while girls were more likely to see themselves as humanities-type students.",
+        result:
+          "The split appears before high-school entrance and is not simply explained by ability differences.",
+        source: "ERIC full text",
+        href: "https://files.eric.ed.gov/fulltext/EJ1475597.pdf",
+      },
+      {
+        title: "Dutch guidance counsellor stereotypes",
+        tag: "Netherlands · 2025",
+        summary:
+          "Tutors and counsellors associated culture and social science more with girls and science and technology more with boys.",
+        result:
+          "Guidance stereotypes can shape how students understand suitable study tracks.",
+        source: "Cogent Education / Taylor & Francis",
+        href: "https://www.tandfonline.com/doi/full/10.1080/2331186X.2025.2586266",
+      },
+      {
+        title: "Gender balancing in elite college admissions",
+        tag: "United States · admissions",
+        summary:
+          "Reports discuss how some colleges have admitted men at higher rates when female applicants greatly outnumber male applicants.",
+        result:
+          "Gender can become an admissions consideration when schools try to balance enrollment.",
+        source: "Washington Post / Hechinger Report",
+        href: "https://hechingerreport.org/an-unexpected-target-of-federal-college-admissions-scrutiny-men/",
+      },
+      {
+        title: "UNESCO global mathematics warning",
+        tag: "Global · 2026",
+        summary:
+          "In 2023, 81% of surveyed education systems showed significant fourth-grade mathematics gaps favoring boys.",
+        result:
+          "The gap was larger than in 2019 and 2015, suggesting early mathematics inequality needs attention.",
+        source: "UNESCO",
+        href: "https://www.unesco.org/en/articles/what-you-need-know-about-why-girls-are-losing-ground-mathematics",
+      },
+      {
+        title: "OECD gender, education and skills report",
+        tag: "OECD · 2023",
+        summary:
+          "The OECD report examines persistent gender gaps in reading, mathematics, science, and later skill investment.",
+        result:
+          "High-performing girls are less likely than high-performing boys to keep investing in mathematics and science pathways.",
+        source: "OECD",
+        href: "https://www.oecd.org/en/publications/gender-education-and-skills_34680dd5-en.html",
+      },
+      {
+        title: "British foreign-language gender gap",
+        tag: "United Kingdom",
+        summary:
+          "Language subjects show persistent gaps, with boys less likely to take and pass GCSE languages.",
+        result:
+          "The British Council and EPI report notes that gender is a strong predictor of language outcomes.",
+        source: "British Council / EPI",
+        href: "https://www.britishcouncil.org/contact/press/new-report-reveals-stark-gender-gap-foreign-languages",
+      },
+      {
+        title: "Six-year-olds and the “brilliance” stereotype",
+        tag: "United States · early childhood",
+        summary:
+          "Girls as young as six become less likely than boys to associate brilliance with their own gender.",
+        result:
+          "Girls also showed less interest in activities described as being for very smart children.",
+        source: "NYU / Science",
+        href: "https://www.nyu.edu/about/news-publications/news/2017/january/stereotypes-about-brilliance-affect-girls-interests-as-early-as-.html",
+      },
+      {
+        title: "Italian teacher bias in mathematics",
+        tag: "Italy · middle school",
+        summary:
+          "When teachers hold stronger gender stereotypes, girls’ mathematics performance and confidence are harmed.",
+        result:
+          "Girls exposed to biased teachers were more likely to select less demanding high-school tracks.",
+        source: "Quarterly Journal of Economics",
+        href: "https://academic.oup.com/qje/article/134/3/1163/5368349",
+      },
+      {
+        title: "Australian career guidance in construction",
+        tag: "Australia · career guidance",
+        summary:
+          "Career counsellors perceived construction as more suitable for young men than young women.",
+        result:
+          "Gendered vocational guidance can reduce girls’ exposure to engineering, manufacturing, and construction pathways.",
+        source: "UTS conference paper",
+        href: "https://epress.lib.uts.edu.au/journals/index.php/AJCEB-Conference-Series/article/view/3157",
+      },
+    ],
     simulatorLabel: "Interactive Prototype",
     simulatorTitle: "Course Choice Bias Simulator",
     simulatorDesc:
@@ -229,6 +344,8 @@ const translations = {
     notes: {
       guanghuaGradeBalance:
         "Grade 10 at Guanghua Cambridge has more female students overall, so the higher female ratio in this record may partly reflect the grade-level population rather than only course-specific preference.",
+      wlsaPlacementSystem:
+        "WLSA Grade 10 Mathematics is divided into Algebra 2, Precalculus, and two Calculus BC classes. Physics is also divided into Intro to Physics and AP Physics 1. Calculus BC and AP Physics 1 require a placement test, so this ratio may be affected by course-entry placement rather than only student preference.",
     },
     notSpecified: "Not specified",
     introLabel: "Project Introduction",
@@ -314,6 +431,7 @@ const translations = {
     siteSubtitle: "选课中的性别偏见",
     navIntro: "项目介绍",
     navData: "数据展示",
+    navNews: "新闻证据",
     navSimulator: "偏见模拟器",
     navFeedback: "反馈",
     welcome: "欢迎",
@@ -376,6 +494,113 @@ const translations = {
     datasetLimitationTitle: "如何更谨慎地理解这些数据",
     datasetLimitationDesc:
       "本数据来自几所国际学校的部分选修课程，并不包括所有课程、所有年级或所有学生。因此，这些数据不应被理解为性别偏见的最终证明，而应被视为探索性证据，用来发现可能的趋势并提出更深入的问题。",
+    newsLabel: "新闻与研究证据",
+    newsTitle: "10 个关于性别刻板印象如何影响教育选择的案例",
+    newsDesc:
+      "这些案例从你提供的新闻与研究列表中筛选而来。每一行概括一个现象、结果，并在能找到可靠来源时提供链接。",
+    newsSourceLink: "查看来源",
+    newsItems: [
+      {
+        title: "美国布朗大学研究",
+        tag: "美国 · 2025",
+        summary:
+          "大一新生普遍存在“男性与 STEM 关联、女性与人文学科关联”的隐性刻板印象。",
+        result:
+          "研究发现，隐性刻板印象会预测专业意向和实际 STEM 课程选择。",
+        source: "ERIC / working paper",
+        href: "https://eric.ed.gov/default.aspx?id=ED674056",
+      },
+      {
+        title: "日本初中生研究",
+        tag: "日本 · 2025",
+        summary:
+          "初中男生更倾向把自己看成“理科型”，女生更倾向把自己看成“文科型”。",
+        result:
+          "这种差异在高中入学前已经出现，并不只是由学习能力差异解释。",
+        source: "ERIC full text",
+        href: "https://files.eric.ed.gov/fulltext/EJ1475597.pdf",
+      },
+      {
+        title: "荷兰升学指导研究",
+        tag: "荷兰 · 2025",
+        summary:
+          "指导老师更容易把文化与社科方向和女生联系起来，把科学与技术方向和男生联系起来。",
+        result:
+          "老师和升学指导中的刻板印象可能影响学生对“适合自己的课程”的判断。",
+        source: "Cogent Education / Taylor & Francis",
+        href: "https://www.tandfonline.com/doi/full/10.1080/2331186X.2025.2586266",
+      },
+      {
+        title: "美国大学招生性别平衡",
+        tag: "美国 · 大学招生",
+        summary:
+          "报道讨论了在女生申请者明显多于男生时，一些大学会以更高比例录取男生以平衡性别比例。",
+        result:
+          "这说明在实际录取中，理性别有时会成为招生结构的一部分。",
+        source: "Washington Post / Hechinger Report",
+        href: "https://hechingerreport.org/an-unexpected-target-of-federal-college-admissions-scrutiny-men/",
+      },
+      {
+        title: "UNESCO 全球数学报告",
+        tag: "全球 · 2026",
+        summary:
+          "2023 年四年级学生中，81% 的受调查教育体系存在男生数学成绩显著优于女生的差距。",
+        result:
+          "这一比例高于 2019 年和 2015 年，说明数学性别差距在小学阶段已经值得关注。",
+        source: "UNESCO",
+        href: "https://www.unesco.org/en/articles/what-you-need-know-about-why-girls-are-losing-ground-mathematics",
+      },
+      {
+        title: "OECD 教育与技能报告",
+        tag: "OECD · 2023",
+        summary:
+          "OECD 报告分析了阅读、数学、科学和后续技能投入中的持续性性别差距。",
+        result:
+          "高绩效女生相比高绩效男生更少继续投入数学和科学相关路径。",
+        source: "OECD",
+        href: "https://www.oecd.org/en/publications/gender-education-and-skills_34680dd5-en.html",
+      },
+      {
+        title: "英国现代外语性别差距",
+        tag: "英国",
+        summary:
+          "语言类科目中男生的参与率和通过率持续低于女生。",
+        result:
+          "British Council 与 EPI 的报告指出，性别是语言类科目结果的重要预测因素。",
+        source: "British Council / EPI",
+        href: "https://www.britishcouncil.org/contact/press/new-report-reveals-stark-gender-gap-foreign-languages",
+      },
+      {
+        title: "6 岁儿童的“聪明=男性”刻板印象",
+        tag: "美国 · 儿童早期",
+        summary:
+          "6 岁女孩已经比男孩更不容易把“非常聪明”与自己的性别联系起来。",
+        result:
+          "她们对被描述为“给非常聪明的孩子玩”的活动兴趣也更低。",
+        source: "NYU / Science",
+        href: "https://www.nyu.edu/about/news-publications/news/2017/january/stereotypes-about-brilliance-affect-girls-interests-as-early-as-.html",
+      },
+      {
+        title: "意大利数学教师隐性偏见",
+        tag: "意大利 · 中学",
+        summary:
+          "当教师持有更强的性别刻板印象时，女生的数学表现和自信会受到影响。",
+        result:
+          "这些女生之后更可能选择挑战性较低的高中轨道。",
+        source: "Quarterly Journal of Economics",
+        href: "https://academic.oup.com/qje/article/134/3/1163/5368349",
+      },
+      {
+        title: "澳大利亚职业辅导与建筑行业",
+        tag: "澳大利亚 · 职业指导",
+        summary:
+          "职业辅导老师更倾向认为建筑行业适合男生，而不是女生。",
+        result:
+          "这种职业指导中的性别化判断可能减少女生接触工程、制造和建筑领域的机会。",
+        source: "UTS conference paper",
+        href: "https://epress.lib.uts.edu.au/journals/index.php/AJCEB-Conference-Series/article/view/3157",
+      },
+    ],
     simulatorLabel: "互动原型",
     simulatorTitle: "选课偏见模拟器",
     simulatorDesc:
@@ -465,6 +690,8 @@ const translations = {
     notes: {
       guanghuaGradeBalance:
         "光华剑桥 10 年级女生本身多于男生，因此该数据中较高的女生比例可能部分来自年级整体性别结构，而不完全代表课程本身的偏好差异。",
+      wlsaPlacementSystem:
+        "WLSA 10 年级数学分为 Algebra 2、Precalculus 和两个 Calculus BC 班；物理也分为 Intro to Physics 和 AP Physics 1。Calculus BC 和 AP Physics 1 需要参加分班考，因此该数据可能受到课程门槛或分班机制影响，而不只是学生偏好。",
     },
     notSpecified: "未注明",
     introLabel: "项目介绍",
@@ -773,6 +1000,7 @@ function CourseDataCarousel({ cards, t }) {
   );
 }
 
+
 function RoomScene({
   t,
   status,
@@ -788,45 +1016,16 @@ function RoomScene({
   const revealStyle = (score, threshold = 55, delay = 0) => {
     const visible = score >= threshold;
     return {
-      opacity: visible ? 1 : 0.06,
+      opacity: visible ? 1 : 0.08,
       transform: visible
         ? "translate3d(0,0,0) scale(1)"
-        : "translate3d(0,14px,0) scale(0.92)",
-      filter: visible ? "blur(0px)" : "blur(4px)",
+        : "translate3d(0,12px,0) scale(0.94)",
+      filter: visible ? "blur(0px)" : "blur(3px)",
       transition:
-        "opacity 700ms ease, transform 850ms cubic-bezier(0.22, 1, 0.36, 1), filter 800ms ease, box-shadow 700ms ease",
+        "opacity 650ms ease, transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 650ms ease",
       transitionDelay: `${delay}ms`,
     };
   };
-
-  const glowStyle = (score, threshold = 75) => ({
-    boxShadow:
-      score >= threshold
-        ? "0 14px 28px rgba(120, 53, 15, 0.22)"
-        : "0 6px 14px rgba(120, 53, 15, 0.10)",
-  });
-
-  const avatarPalette =
-    scenarioGender === "female"
-      ? {
-          shirt: pressureDominant ? "bg-rose-500" : "bg-rose-400",
-          hair: "bg-amber-950",
-          accent: "bg-rose-200",
-          bodyShape: "rounded-t-[2rem]",
-        }
-      : scenarioGender === "male"
-        ? {
-            shirt: pressureDominant ? "bg-sky-600" : "bg-sky-500",
-            hair: "bg-neutral-800",
-            accent: "bg-sky-200",
-            bodyShape: "rounded-t-[1.25rem]",
-          }
-        : {
-            shirt: pressureDominant ? "bg-violet-600" : "bg-violet-500",
-            hair: "bg-neutral-700",
-            accent: "bg-violet-200",
-            bodyShape: "rounded-t-[1.5rem]",
-          };
 
   return (
     <div className="rounded-3xl border border-orange-200 bg-white p-5 shadow-lg">
@@ -841,14 +1040,11 @@ function RoomScene({
           <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-900">
             {openExploration}/100
           </span>
-          <span className="rounded-full border border-orange-200 bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
-            {scenarioGender === "female" ? t.female : scenarioGender === "male" ? t.male : t.nonBinary}
-          </span>
         </div>
       </div>
 
       <div
-        className={`relative mt-4 h-[540px] overflow-hidden rounded-2xl border border-orange-100 transition-all duration-700 ${
+        className={`relative mt-4 h-[520px] overflow-hidden rounded-2xl border border-orange-100 transition-all duration-700 ${
           brightRoom
             ? "bg-gradient-to-b from-amber-50 via-orange-50 to-orange-100"
             : "bg-gradient-to-b from-orange-100 via-orange-100 to-orange-200"
@@ -856,66 +1052,69 @@ function RoomScene({
       >
         <div className="absolute inset-x-0 bottom-0 h-40 bg-orange-200" />
         <div className="absolute inset-x-0 bottom-40 h-[2px] bg-orange-300" />
-        <div className="absolute inset-x-0 bottom-0 h-40 room-floor-grid opacity-60" />
-        <div className="absolute bottom-8 left-16 right-16 h-16 rounded-full bg-orange-300/30 blur-2xl" />
-
+        <div className="absolute inset-x-0 bottom-0 h-40 room-floor-grid opacity-55" />
+        <div className="absolute bottom-8 left-[16%] right-[16%] h-16 rounded-full bg-orange-300/30 blur-2xl" />
         <div
           className={`absolute inset-0 transition-opacity duration-700 ${
             pressureDominant ? "bg-orange-900/10" : "bg-transparent"
           }`}
         />
 
-        <div className="absolute left-6 top-8 h-36 w-32 rounded-xl border-4 border-orange-200 bg-sky-100 shadow-inner">
+        {/* Window and light */}
+        <div className="absolute left-6 top-8 h-32 w-[7.5rem] rounded-xl border-4 border-orange-200 bg-sky-100 shadow-inner">
           <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-orange-200" />
           <div className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-orange-200" />
-          <div className="absolute -right-2 top-6 h-24 w-3 rounded-full bg-orange-100/90" />
           <div
             className="absolute left-4 top-5 h-10 w-10 rounded-full bg-yellow-300/80 blur-sm transition-all duration-700"
-            style={{ opacity: brightRoom ? 1 : 0.3 }}
+            style={{ opacity: brightRoom ? 1 : 0.28 }}
           />
         </div>
-
         <div
-          className="absolute left-12 top-36 h-44 w-72 rotate-12 bg-yellow-100/60 blur-2xl transition-all duration-700"
-          style={{ opacity: brightRoom ? 1 : 0.18 }}
+          className="absolute left-12 top-32 h-44 w-64 rotate-12 bg-yellow-100/60 blur-2xl transition-all duration-700"
+          style={{ opacity: brightRoom ? 0.95 : 0.16 }}
         />
 
+        {/* Clock */}
         <div className="absolute left-44 top-10 h-14 w-14 rounded-full border-4 border-orange-200 bg-white shadow">
           <div className="absolute left-1/2 top-1/2 h-4 w-[2px] -translate-x-1/2 -translate-y-full bg-orange-500" />
           <div className="absolute left-1/2 top-1/2 h-[2px] w-4 bg-orange-500" />
           <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500" />
         </div>
 
-        <div className="absolute right-6 top-7 h-[8rem] w-[11rem] rounded-2xl border border-orange-200 bg-white/90 p-3 shadow-sm">
+        {/* Study board: formulas only, no bar charts */}
+        <div className="absolute right-7 top-7 h-28 w-44 rounded-2xl border border-orange-200 bg-white/90 p-3 shadow-sm">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-orange-700">Board</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-orange-700">Study Board</span>
             <span className="h-2 w-2 rounded-full bg-orange-300" />
           </div>
           <div style={revealStyle(courseScores.physics, 48, 80)}>
             <div className="text-sm font-bold text-neutral-800">F = ma</div>
-            <div className="mt-1 h-1.5 w-24 rounded bg-orange-200" />
+            <div className="mt-1 h-1.5 w-20 rounded bg-orange-200" />
           </div>
           <div className="mt-3" style={revealStyle(courseScores.mathematics, 48, 140)}>
             <div className="text-sm font-bold text-neutral-800">∫ f(x) dx</div>
-            <div className="mt-1 h-1.5 w-20 rounded bg-orange-200" />
-          </div>
-          <div className="mt-3" style={revealStyle(courseScores.economics, 46, 220)}>
-            <div className="h-1.5 w-16 rounded bg-green-200" />
-            <div className="mt-1 flex h-7 items-end gap-1">
-              <span className="h-2 w-2 rounded bg-orange-300" />
-              <span className="h-4 w-2 rounded bg-orange-400" />
-              <span className="h-6 w-2 rounded bg-green-500" />
-              <span className="h-5 w-2 rounded bg-amber-500" />
-            </div>
+            <div className="mt-1 h-1.5 w-16 rounded bg-orange-200" />
           </div>
         </div>
 
-        <div className="absolute right-8 top-52 h-3 w-[12.5rem] rounded bg-orange-300 shadow-sm" />
-        <div className="absolute right-[7.25rem] top-[13.2rem] h-11 w-14 rounded-lg border border-orange-200 bg-white shadow-sm" />
-
+        {/* Geography map */}
         <div
-          className="absolute right-16 top-[8.8rem] flex items-end gap-1"
-          style={{ ...revealStyle(courseScores.philosophy, 45, 120), ...glowStyle(courseScores.philosophy) }}
+          className="absolute right-12 top-[10.5rem] rounded-2xl border border-orange-200 bg-white/85 p-3 shadow-sm"
+          style={revealStyle(courseScores.geography, 50, 170)}
+        >
+          <div className="text-[10px] font-semibold text-neutral-500">{t.courseGeography}</div>
+          <div className="mt-2 h-16 w-28 rounded-xl border border-sky-200 bg-sky-100 p-2">
+            <div className="h-4 w-12 rounded-full bg-green-400" />
+            <div className="ml-10 mt-1 h-3 w-8 rounded-full bg-green-500" />
+            <div className="ml-3 mt-2 h-3 w-16 rounded-full bg-green-300" />
+          </div>
+        </div>
+
+        {/* Shelf and books */}
+        <div className="absolute right-9 top-[16.7rem] h-3 w-48 rounded bg-orange-300 shadow-sm" />
+        <div
+          className="absolute right-24 top-[13.3rem] flex items-end gap-1"
+          style={revealStyle(courseScores.philosophy, 45, 110)}
         >
           <div className="h-9 w-4 rounded bg-orange-400" />
           <div className="h-12 w-4 rounded bg-amber-500" />
@@ -924,20 +1123,14 @@ function RoomScene({
           <div className="h-10 w-4 rounded bg-orange-700" />
         </div>
 
-        <div
-          className="absolute right-14 top-[15.1rem] rounded-xl border border-orange-200 bg-white/85 px-3 py-2 text-xs font-semibold text-neutral-800"
-          style={{ ...revealStyle(courseScores.geography, 50, 170), ...glowStyle(courseScores.geography) }}
-        >
-          <div className="text-[10px] text-neutral-500">{t.courseGeography}</div>
-          <div className="mt-1 h-10 w-16 rounded-full border-2 border-sky-300 bg-sky-100">
-            <div className="ml-2 mt-2 h-3 w-8 rounded-full bg-green-400" />
-            <div className="ml-7 mt-1 h-2 w-5 rounded-full bg-green-500" />
-          </div>
-        </div>
+        {/* Side table for chemistry and biology */}
+        <div className="absolute left-8 top-[14.2rem] h-3 w-40 rounded bg-orange-300 shadow-sm" />
+        <div className="absolute left-12 top-[15rem] h-16 w-3 rounded bg-orange-400" />
+        <div className="absolute left-[9.4rem] top-[15rem] h-16 w-3 rounded bg-orange-400" />
 
         <div
-          className="absolute left-8 top-[14rem] rounded-xl border border-orange-200 bg-white/85 px-3 py-2"
-          style={{ ...revealStyle(courseScores.chemistry, 50, 150), ...glowStyle(courseScores.chemistry) }}
+          className="absolute left-12 top-[11.5rem] rounded-xl border border-orange-200 bg-white/85 px-3 py-2 shadow-sm"
+          style={revealStyle(courseScores.chemistry, 50, 130)}
         >
           <div className="text-[10px] font-semibold text-neutral-500">{t.courseChemistry}</div>
           <div className="mt-2 flex items-end gap-2">
@@ -948,10 +1141,10 @@ function RoomScene({
         </div>
 
         <div
-          className="absolute left-[8.5rem] top-[14.4rem]"
-          style={{ ...revealStyle(courseScores.biology, 48, 200), ...glowStyle(courseScores.biology) }}
+          className="absolute left-[8.6rem] top-[12rem]"
+          style={revealStyle(courseScores.biology, 48, 180)}
         >
-          <div className="relative mx-auto h-11 w-14">
+          <div className="relative mx-auto h-12 w-16">
             <div className="absolute left-2 top-4 h-5 w-8 -rotate-12 rounded-full bg-green-500" />
             <div className="absolute right-1 top-0 h-6 w-8 rotate-12 rounded-full bg-green-600" />
             <div className="absolute left-1/2 top-5 h-7 w-[3px] -translate-x-1/2 bg-green-800" />
@@ -959,77 +1152,55 @@ function RoomScene({
           <div className="mx-auto h-6 w-10 rounded-b-full bg-orange-500" />
         </div>
 
+        {/* Business / economics represented as folders and coins, not charts */}
+        <div className="absolute left-[2.2rem] bottom-[5.2rem] h-24 w-28 rounded-2xl border border-orange-300 bg-orange-100 shadow-sm" />
         <div
-          className="absolute left-[3rem] top-[19rem] rounded-xl border border-orange-200 bg-white/85 px-3 py-2"
-          style={{ ...revealStyle(courseScores.business, 46, 190), ...glowStyle(courseScores.business) }}
+          className="absolute left-[3.2rem] bottom-[9.7rem]"
+          style={revealStyle(courseScores.business, 46, 210)}
         >
-          <div className="text-[10px] font-semibold text-neutral-500">{t.courseBusiness}</div>
-          <div className="mt-2 h-8 w-14 rounded-md border border-orange-300 bg-amber-100 shadow-sm">
-            <div className="ml-2 h-2.5 w-6 rounded-b bg-amber-200" />
+          <div className="h-9 w-16 rounded-md border border-orange-300 bg-amber-100 shadow-sm">
+            <div className="ml-2 h-3 w-7 rounded-b bg-amber-200" />
             <div className="mx-2 mt-2 h-1 rounded bg-orange-300" />
-            <div className="mx-2 mt-1 h-1 rounded bg-orange-200" />
           </div>
         </div>
-
         <div
-          className="absolute left-[9.2rem] top-[18.7rem] rounded-xl border border-orange-200 bg-white/85 px-3 py-2"
-          style={{ ...revealStyle(courseScores.economics, 48, 240), ...glowStyle(courseScores.economics) }}
+          className="absolute left-[6.7rem] bottom-[9.6rem] flex items-end gap-1"
+          style={revealStyle(courseScores.economics, 48, 240)}
         >
-          <div className="text-[10px] font-semibold text-neutral-500">{t.courseEconomics}</div>
-          <div className="mt-2 flex h-8 items-end gap-1">
-            <span className="h-3 w-2 rounded bg-orange-300" />
-            <span className="h-5 w-2 rounded bg-orange-500" />
-            <span className="h-7 w-2 rounded bg-green-500" />
-            <span className="h-6 w-2 rounded bg-amber-500" />
-          </div>
+          <span className="h-5 w-5 rounded-full border border-amber-500 bg-amber-200" />
+          <span className="h-6 w-6 rounded-full border border-amber-500 bg-amber-300" />
+          <span className="h-4 w-4 rounded-full border border-amber-500 bg-amber-100" />
         </div>
 
-        <div className="absolute left-[2rem] bottom-[7.25rem] h-24 w-12 rounded-2xl border border-orange-300 bg-orange-100 shadow-sm">
-          <div className="mt-5 h-7 w-7 rounded-full bg-orange-300/70 mx-auto" />
-          <div className="mt-4 h-1.5 w-7 rounded-full bg-orange-200 mx-auto" />
-        </div>
+        {/* Clean study desk: visual scenario now focuses only on subject-related objects */}
+        <div className="absolute left-1/2 bottom-[8.65rem] z-30 h-6 w-[21rem] -translate-x-1/2 rounded-t-xl bg-orange-400 shadow-md" />
+        <div className="absolute left-[calc(50%-150px)] bottom-10 z-20 h-24 w-4 rounded bg-orange-400" />
+        <div className="absolute left-[calc(50%+134px)] bottom-10 z-20 h-24 w-4 rounded bg-orange-400" />
+        <div className="absolute left-1/2 bottom-[9.8rem] z-30 h-4 w-[21rem] -translate-x-1/2 rounded bg-orange-300" />
 
-        <div className="absolute left-[4.75rem] bottom-[7.5rem] h-3 w-28 rounded bg-orange-300 shadow-sm" />
-        <div className="absolute left-[6.6rem] bottom-[4.6rem] h-12 w-4 rounded bg-orange-400" />
-        <div className="absolute left-[11.05rem] bottom-[4.6rem] h-12 w-4 rounded bg-orange-400" />
-
-        <div className="absolute left-[15rem] bottom-[5.3rem] h-16 w-28 rounded-2xl border border-orange-200 bg-white/75 shadow-sm" />
-        <div className="absolute left-[15.75rem] bottom-[6.7rem] flex gap-1">
-          <span className="h-8 w-3 rounded bg-orange-300" />
-          <span className="h-11 w-3 rounded bg-green-500" />
-          <span className="h-9 w-3 rounded bg-amber-500" />
-          <span className="h-10 w-3 rounded bg-stone-400" />
-        </div>
-
-        <div className="absolute right-[2.5rem] bottom-[6rem] h-20 w-16 rounded-b-3xl rounded-t-xl border border-orange-200 bg-white/80 shadow-sm" />
-        <div className="absolute right-[3.2rem] bottom-[9.75rem] h-5 w-8 rounded-full bg-orange-100" />
-        <div className="absolute right-[3.1rem] bottom-[7.8rem] h-1.5 w-10 rounded-full bg-orange-200" />
-        <div className="absolute right-[3.5rem] bottom-[7rem] h-1.5 w-7 rounded-full bg-orange-200" />
-
-        <div className="absolute left-1/2 bottom-40 h-5 w-[19rem] -translate-x-1/2 rounded bg-orange-400 shadow-md" />
-        <div className="absolute left-[calc(50%-136px)] bottom-14 h-24 w-4 rounded bg-orange-400" />
-        <div className="absolute left-[calc(50%+122px)] bottom-14 h-24 w-4 rounded bg-orange-400" />
-        <div className="absolute left-1/2 bottom-16 h-12 w-20 -translate-x-1/2 rounded-t-xl bg-orange-300 shadow" />
-        <div className="absolute left-[calc(50%-116px)] bottom-[11.1rem] h-4 w-20 rounded bg-white shadow" />
-        <div className="absolute left-[calc(50%-108px)] bottom-[12.1rem] h-1.5 w-16 rounded bg-orange-200" />
-
+        {/* Laptop / CS */}
         <div
-          className="absolute left-[calc(50%+18px)] bottom-[11.1rem]"
-          style={{ ...revealStyle(courseScores.computerScience, 48, 120), ...glowStyle(courseScores.computerScience) }}
+          className="absolute left-[calc(50%+42px)] bottom-[10.6rem] z-50"
+          style={revealStyle(courseScores.computerScience, 48, 120)}
         >
-          <div className="h-14 w-20 rounded-t-md border border-neutral-500 bg-neutral-800 shadow">
-            <div className="m-1 h-11 rounded bg-sky-200">
+          <div className="h-[3.75rem] w-24 rounded-t-md border border-neutral-500 bg-neutral-800 shadow">
+            <div className="m-1.5 h-11 rounded bg-sky-200">
               <div className="mx-auto pt-3 text-center text-xs font-bold text-sky-900">CS</div>
             </div>
           </div>
-          <div className="mx-auto h-2 w-[5.5rem] rounded-b bg-neutral-600" />
+          <div className="mx-auto h-2 w-28 rounded-b bg-neutral-600" />
         </div>
 
+        {/* Notebook + calculator / Math */}
+        <div className="absolute left-[calc(50%-122px)] bottom-[10.8rem] z-50 h-5 w-24 rounded bg-white shadow">
+          <div className="mt-1 h-1 w-16 rounded bg-orange-200" />
+          <div className="mt-1 h-1 w-12 rounded bg-orange-200" />
+        </div>
         <div
-          className="absolute left-[calc(50%-38px)] bottom-[11.6rem]"
-          style={{ ...revealStyle(courseScores.mathematics, 52, 90), ...glowStyle(courseScores.mathematics) }}
+          className="absolute left-[calc(50%-44px)] bottom-[10.8rem] z-50"
+          style={revealStyle(courseScores.mathematics, 52, 90)}
         >
-          <div className="h-9 w-[3.25rem] rounded-lg border border-orange-200 bg-white shadow-sm">
+          <div className="h-10 w-12 rounded-lg border border-orange-200 bg-white shadow-sm">
             <div className="grid grid-cols-3 gap-[2px] p-1.5">
               {Array.from({ length: 9 }).map((_, index) => (
                 <div key={index} className="h-1.5 rounded bg-orange-200" />
@@ -1038,62 +1209,8 @@ function RoomScene({
           </div>
         </div>
 
-        <div className="absolute left-1/2 bottom-[12.2rem] -translate-x-1/2 transition-all duration-700">
-          <div className="relative mx-auto h-[3.5rem] w-[3.5rem]">
-            <div className={`absolute left-1/2 top-[0.2rem] h-[2.5rem] w-[2.8rem] -translate-x-1/2 rounded-full ${avatarPalette.accent}`} />
-            <div className={`absolute left-1/2 top-0 h-[2.1rem] w-[3rem] -translate-x-1/2 rounded-t-full rounded-b-[1rem] ${avatarPalette.hair}`} />
-            {scenarioGender === "female" && (
-              <>
-                <div className={`absolute left-1/2 top-[0.8rem] h-[2.7rem] w-[3.2rem] -translate-x-1/2 rounded-b-[1.4rem] rounded-t-[0.6rem] ${avatarPalette.hair}`} />
-                <div className={`absolute left-[0.5rem] top-[1.2rem] h-[1.8rem] w-[0.55rem] rounded-full ${avatarPalette.hair}`} />
-                <div className={`absolute right-[0.5rem] top-[1.2rem] h-[1.8rem] w-[0.55rem] rounded-full ${avatarPalette.hair}`} />
-              </>
-            )}
-            {scenarioGender === "male" && (
-              <>
-                <div className={`absolute left-1/2 top-[0.2rem] h-[1.2rem] w-[2.8rem] -translate-x-1/2 rounded-t-full ${avatarPalette.hair}`} />
-                <div className={`absolute left-1/2 top-[2.6rem] h-[0.45rem] w-[0.9rem] -translate-x-1/2 rounded-full bg-orange-200`} />
-              </>
-            )}
-            {scenarioGender === "nonBinary" && (
-              <>
-                <div className={`absolute left-1/2 top-[0.35rem] h-[1.8rem] w-[2.9rem] -translate-x-1/2 rounded-t-full rounded-b-[0.8rem] ${avatarPalette.hair}`} />
-                <div className={`absolute left-1/2 top-[1.7rem] h-[1rem] w-[2.2rem] -translate-x-1/2 rounded-b-[0.8rem] ${avatarPalette.hair}`} />
-              </>
-            )}
-          </div>
-          <div className="mx-auto -mt-1 h-2 w-4 rounded-full bg-orange-200" />
-          <div className={`mx-auto mt-0.5 h-20 w-[4.3rem] ${avatarPalette.bodyShape} ${avatarPalette.shirt} transition-colors duration-700`} />
-          <div className="mx-auto -mt-1 flex w-[5.2rem] justify-between">
-            <span className="h-4 w-3 rounded-b-full bg-orange-300" />
-            <span className="h-4 w-3 rounded-b-full bg-orange-300" />
-          </div>
-        </div>
-
-        <div className="absolute left-[calc(50%+92px)] bottom-[11.1rem]"
-          style={{ ...revealStyle(courseScores.economics, 50, 160), ...glowStyle(courseScores.economics) }}
-        >
-          <div className="h-14 w-16 rounded-xl border border-orange-200 bg-white p-2 shadow-sm">
-            <div className="flex h-9 items-end gap-1">
-              <div className="h-4 w-2 rounded bg-orange-300" />
-              <div className="h-7 w-2 rounded bg-orange-500" />
-              <div className="h-5 w-2 rounded bg-green-500" />
-              <div className="h-9 w-2 rounded bg-amber-500" />
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute left-[calc(50%+144px)] bottom-[11.1rem]"
-          style={{ ...revealStyle(courseScores.business, 50, 190), ...glowStyle(courseScores.business) }}
-        >
-          <div className="h-10 w-16 rounded-md border border-orange-300 bg-amber-100 shadow-sm">
-            <div className="ml-2 h-3 w-7 rounded-b bg-amber-200" />
-            <div className="mx-2 mt-2 h-1 rounded bg-orange-300" />
-            <div className="mx-2 mt-1 h-1 rounded bg-orange-200" />
-          </div>
-        </div>
-
-        <div className="absolute right-28 bottom-44">
+        {/* Lamp */}
+        <div className="absolute right-28 bottom-[9.9rem] z-50">
           <div className="relative h-[4.5rem] w-12">
             <div className="absolute bottom-0 left-3 h-2 w-8 rounded-full bg-neutral-500" />
             <div className="absolute bottom-2 left-6 h-9 w-[2px] bg-neutral-600" />
@@ -1106,19 +1223,75 @@ function RoomScene({
           </div>
         </div>
 
-        <div className="absolute left-5 bottom-40 max-w-[190px] rounded-2xl border border-orange-200 bg-white/90 px-4 py-2 text-sm font-semibold text-neutral-800 shadow transition-all duration-700">
+        <div className="absolute left-5 bottom-40 z-50 max-w-[180px] rounded-2xl border border-orange-200 bg-white/90 px-4 py-2 text-sm font-semibold text-neutral-800 shadow transition-all duration-700">
           {status}
-        </div>
-
-        <div className="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2 text-[10px] font-semibold text-neutral-700 md:grid-cols-5">
-          <div className="rounded-full bg-white/75 px-2 py-1 text-center">CS: {courseScores.computerScience}%</div>
-          <div className="rounded-full bg-white/75 px-2 py-1 text-center">Physics: {courseScores.physics}%</div>
-          <div className="rounded-full bg-white/75 px-2 py-1 text-center">Bio: {courseScores.biology}%</div>
-          <div className="rounded-full bg-white/75 px-2 py-1 text-center">Math: {courseScores.mathematics}%</div>
-          <div className="rounded-full bg-white/75 px-2 py-1 text-center">Business: {courseScores.business}%</div>
         </div>
       </div>
     </div>
+  );
+}
+
+function NewsEvidenceSection({ t }) {
+  const columns = [t.newsItems.slice(0, 5), t.newsItems.slice(5, 10)];
+
+  return (
+    <section
+      id="news"
+      className="scroll-mt-28 rounded-3xl border border-orange-300/80 bg-white/90 p-8 shadow-xl backdrop-blur-sm transition duration-300 hover:-translate-y-1 md:p-10"
+    >
+      <div className="max-w-4xl">
+        <p className="text-sm font-semibold uppercase tracking-widest text-orange-800">
+          {t.newsLabel}
+        </p>
+        <h3 className="mt-3 text-3xl font-bold text-neutral-900 md:text-4xl">
+          {t.newsTitle}
+        </h3>
+        <p className="mt-4 leading-8 text-neutral-800">{t.newsDesc}</p>
+      </div>
+
+      <div className="mt-7 grid gap-4 lg:grid-cols-2">
+        {columns.map((column, columnIndex) => (
+          <div key={columnIndex} className="grid grid-rows-5 gap-3">
+            {column.map((item, index) => {
+              const number = columnIndex * 5 + index + 1;
+              return (
+                <article
+                  key={item.title}
+                  className="grid min-h-[154px] grid-cols-[3rem_1fr] gap-4 rounded-2xl border border-orange-200 bg-orange-50/75 p-4 transition hover:-translate-y-0.5 hover:bg-white"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-600 text-sm font-bold text-white shadow-sm">
+                    {String(number).padStart(2, "0")}
+                  </div>
+                  <div>
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <h4 className="text-base font-bold text-neutral-900">{item.title}</h4>
+                      <span className="rounded-full border border-orange-200 bg-white px-2 py-0.5 text-[11px] font-semibold text-orange-900">
+                        {item.tag}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-neutral-700">{item.summary}</p>
+                    <p className="mt-2 text-xs leading-5 text-neutral-600">
+                      <span className="font-semibold text-orange-800">Result: </span>
+                      {item.result}
+                    </p>
+                    {item.href && (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-3 inline-flex items-center rounded-full border border-orange-300 bg-white px-3 py-1.5 text-xs font-semibold text-orange-900 transition hover:bg-orange-100"
+                      >
+                        {t.newsSourceLink} · {item.source}
+                      </a>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -1291,15 +1464,10 @@ function BiasSimulator({ t }) {
 
   const ResultCard = ({ label, value }) => (
     <div className="rounded-2xl border border-orange-100 bg-orange-50/70 p-4">
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-sm font-semibold text-neutral-800">{label}</span>
-        <span className="text-xl font-bold text-neutral-900">{value}%</span>
-      </div>
-      <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-white">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-orange-500 to-green-600 transition-all duration-500"
-          style={{ width: `${value}%` }}
-        />
+      <span className="text-xs font-semibold uppercase tracking-wide text-orange-800">{label}</span>
+      <div className="mt-2 flex items-end gap-1">
+        <span className="text-3xl font-bold text-neutral-900">{value}</span>
+        <span className="mb-1 text-sm font-semibold text-neutral-500">%</span>
       </div>
     </div>
   );
@@ -1353,25 +1521,39 @@ function BiasSimulator({ t }) {
       <div className="mt-6 grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
         <div className="space-y-4">
           <div className="rounded-2xl border border-orange-100 bg-white p-4 shadow-sm">
-            <div className="mb-3 flex items-center justify-between gap-3">
+            <div className="mb-4 flex items-center justify-between gap-3">
               <span className="text-sm font-semibold text-neutral-800">{t.gender}</span>
-              <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-900">
+              <span className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-900">
+                <img
+                  src={genderAvatarIcons[scenarioGender]}
+                  alt=""
+                  className="h-6 w-6 rounded-full object-cover ring-1 ring-orange-100"
+                />
                 {scenarioGender === "female" ? t.female : scenarioGender === "male" ? t.male : t.nonBinary}
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-3">
               {genderOptions.map(([value, label]) => (
                 <button
                   key={value}
                   type="button"
                   onClick={() => setScenarioGender(value)}
-                  className={`rounded-2xl border px-3 py-2 text-xs font-semibold transition ${
+                  className={`group rounded-2xl border px-2.5 py-3 text-xs font-semibold transition ${
                     scenarioGender === value
-                      ? "border-orange-600 bg-orange-600 text-white"
-                      : "border-orange-200 bg-orange-50 text-orange-900 hover:bg-orange-100"
+                      ? "border-orange-600 bg-orange-600 text-white shadow-md"
+                      : "border-orange-200 bg-orange-50 text-orange-900 hover:border-orange-400 hover:bg-orange-100"
                   }`}
                 >
-                  {label}
+                  <img
+                    src={genderAvatarIcons[value]}
+                    alt=""
+                    className={`mx-auto mb-2 h-14 w-14 rounded-full object-cover transition ${
+                      scenarioGender === value
+                        ? "ring-2 ring-white"
+                        : "ring-1 ring-orange-200 group-hover:ring-orange-400"
+                    }`}
+                  />
+                  <span>{label}</span>
                 </button>
               ))}
             </div>
@@ -1462,19 +1644,13 @@ function BiasSimulator({ t }) {
                   className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-2xl border border-orange-100 bg-orange-50/60 px-4 py-3"
                 >
                   <div>
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-sm font-semibold text-neutral-900">{course.label}</span>
-                      <span className="text-xs font-semibold text-neutral-500">{course.score}%</span>
-                    </div>
-                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-orange-500 to-green-600 transition-all duration-500"
-                        style={{ width: `${course.score}%` }}
-                      />
-                    </div>
+                    <span className="text-sm font-semibold text-neutral-900">{course.label}</span>
+                    <p className="mt-1 text-xs font-medium text-neutral-500">
+                      {getCourseStatus(course.score)}
+                    </p>
                   </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-orange-900">
-                    {getCourseStatus(course.score)}
+                  <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-orange-900">
+                    {course.score}%
                   </span>
                 </div>
               ))}
@@ -2333,6 +2509,8 @@ export default function GenderBiasCourseSelectionWebsite() {
             </div>
           </div>
         </section>
+
+        <NewsEvidenceSection t={t} />
 
         <BiasSimulator t={t} />
 
