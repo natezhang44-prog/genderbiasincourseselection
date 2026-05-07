@@ -1735,88 +1735,69 @@ function FloatingBackground() {
         }
 
         .bar-female {
-          background: #b87963;
-        }
+  background: #b87963;
+}
 
-        .bar-male {
-          background: #6f7f5f;
-        }
+.bar-male {
+  background: #6f7f5f;
+}
 
-        .school-card-size {
-          width: min(100%, 440px);
-        }
+.school-card-size {
+  width: 100%;
+  max-width: 460px;
+}
 
-        .carousel-stage {
-          height: 500px;
-          max-width: 760px;
-        }
+.carousel-stage {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  min-height: 540px;
+  margin: 0 auto;
+}
 
-        .carousel-card-position {
-          position: absolute;
-          left: 50%;
-          top: 0;
-          width: min(100%, 440px);
-          transform-origin: center center;
-          transition:
-            transform 520ms ease,
-            opacity 520ms ease,
-            filter 520ms ease;
-        }
+.carousel-card-position {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  transform-origin: center center;
+  transition:
+    transform 420ms ease,
+    opacity 420ms ease,
+    filter 420ms ease;
+}
 
-        .carousel-card-active {
-          z-index: 20;
-          opacity: 1;
-          filter: blur(0);
-          pointer-events: auto;
-          transform: translateX(-50%) scale(1);
-        }
+.carousel-card-active {
+  z-index: 20;
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+}
 
-        .carousel-card-left {
-          z-index: 10;
-          opacity: 0.42;
-          filter: blur(3px);
-          pointer-events: none;
-          transform: translateX(-118%) scale(0.88);
-        }
+.carousel-card-left,
+.carousel-card-right,
+.carousel-card-hidden {
+  z-index: 0;
+  opacity: 0;
+  filter: blur(6px);
+  pointer-events: none;
+  transform: translateX(0) scale(0.96);
+}
 
-        .carousel-card-right {
-          z-index: 10;
-          opacity: 0.42;
-          filter: blur(3px);
-          pointer-events: none;
-          transform: translateX(18%) scale(0.88);
-        }
+.data-course-list {
+  max-height: 310px;
+}
 
-        .carousel-card-hidden {
-          opacity: 0;
-          pointer-events: none;
-          filter: blur(6px);
-          transform: translateX(-50%) scale(0.82);
-        }
+@media (max-width: 640px) {
+  .carousel-stage {
+    max-width: 100%;
+    min-height: 560px;
+  }
 
-        .data-course-list {
-          max-height: 300px;
-        }
-
-        @media (min-width: 768px) {
-          .school-card-size {
-            width: 440px;
-          }
-        }
-
-        @media (max-width: 640px) {
-          .carousel-stage {
-            height: 520px;
-          }
-
-          .carousel-card-left {
-            transform: translateX(-106%) scale(0.84);
-          }
-
-          .carousel-card-right {
-            transform: translateX(6%) scale(0.84);
-          }
-        }
+  .school-card-size {
+    max-width: 100%;
+  }
+}
 
         .visitor-form-panel {
           max-height: 80vh;
