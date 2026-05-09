@@ -49,13 +49,13 @@ const courseData = [
   {
     courseCategory: "Business",
     records: [
-      { school: "光华剑桥", courseName: "Business", male: 13, female: 39, grade: "10", system: "A-Level", classCount: null, noteKey: "guanghuaGradeBalance" },
+      { school: "光华剑桥", courseName: "Business", male: 13, female: 39, grade: "10", system: "IG", classCount: null, noteKey: "guanghuaGradeBalance" },
     ],
   },
   {
     courseCategory: "Geography",
     records: [
-      { school: "光华剑桥", courseName: "Geography", male: 8, female: 12, grade: null, system: "A-Level", classCount: null, noteKey: "guanghuaGradeBalance" },
+      { school: "光华剑桥", courseName: "Geography", male: 8, female: 12, grade: null, system: "IG", classCount: null, noteKey: "guanghuaGradeBalance" },
     ],
   },
 ];
@@ -85,13 +85,13 @@ const translations = {
     navSimulator: "Bias Simulator",
     navFeedback: "Feedback",
     welcome: "Welcome",
-    gateTitle: "Before entering the website",
+    gateTitle: "Before continuing",
     gateDescription:
-      "Please choose whether you would like to browse anonymously or first complete a short visitor form.",
-    anonymousTitle: "Browse Anonymously",
-    anonymousDesc: "Enter the website directly without providing any personal details.",
-    formEntryTitle: "Fill in the Form",
-    formEntryDesc: "Answer three quick questions, then continue browsing.",
+      "You have explored the simulator and the model formulas. You may continue browsing anonymously or complete a short visitor form to support the project data.",
+    anonymousTitle: "Continue Anonymously",
+    anonymousDesc: "Keep browsing without providing any personal details.",
+    formEntryTitle: "Fill in the Visitor Form",
+    formEntryDesc: "Answer three quick questions, then continue exploring the website.",
     back: "Back",
     visitorForm: "Visitor Form",
     formTitle: "Please complete this short form",
@@ -108,6 +108,7 @@ const translations = {
     curriculumPlaceholder: "Select your curriculum system",
     ap: "AP",
     ib: "IB",
+    ig: "IG",
     alevel: "A-Level",
     other: "Other",
     gender: "Gender",
@@ -263,7 +264,55 @@ const translations = {
     simulatorLow: "Higher bias pressure",
     simulatorHigh: "More open course choice",
     simulatorNotice:
-      "Prototype only: the current weights are illustrative. After collecting survey responses, this model can be recalibrated using real data.",
+      "This simulator is calibrated with 31 anonymous questionnaire responses. Because the sample is still small, the result should be read as an exploratory estimate rather than a final prediction.",
+    modelSectionLabel: "Mathematical Model",
+    modelSectionTitle: "How the survey-based simulator works",
+    modelSectionIntro:
+      "The simulator uses anonymized individual-level survey records rather than only overall averages. Each respondent becomes one data point, and the model estimates course-choice tendency from support forces, pressure forces, bias exposure, and bias resistance.",
+    modelToggleOpen: "Expand model explanation",
+    modelToggleClose: "Collapse model explanation",
+    modelDataTitle: "1. Individual-level data",
+    modelDataText:
+      "The model uses 31 cleaned questionnaire records. Personal identifiers, IP addresses, submission time, school names, and open-ended comments are not embedded in the public code; only anonymous numerical features are used.",
+    modelIndexTitle: "2. Index construction",
+    modelIndexText:
+      "Interest, confidence, grades, major planning, teacher advice, and school encouragement form a Support Index. Entry pressure, difficulty, family expectation, peer influence, and stereotype influence form a Pressure Index. Two additional indices measure Bias Exposure and Bias Resistance.",
+    modelChoiceTitle: "3. Course probability model",
+    modelChoiceText:
+      "For each course, the model starts from a Laplace-smoothed baseline probability, then adjusts it using the simulated student's indices, gender, curriculum system, and course direction. This creates a multi-label logistic prediction instead of forcing one single course choice.",
+    modelAvoidTitle: "4. Hesitation adjustment",
+    modelAvoidText:
+      "The answer to the avoidance question is used to estimate a category-level hesitation risk. A higher pressure score and higher bias exposure can reduce the final course score, while bias resistance can buffer that penalty.",
+    modelFormulaTitle: "Core formulas",
+    modelFormulaOne: "x' = (x − 1) / 4",
+    modelFormulaTwo: "S = 0.22I + 0.18C + 0.17G + 0.17M + 0.10T + 0.16E_school",
+    modelFormulaThree: "P = 0.23Entry + 0.23Difficulty + 0.16Parent + 0.16Peer + 0.22Stereotype",
+    modelFormulaFour: "BE = 0.52Heard + 0.48ConfidenceEffect; BR = 0.45MinorityComfort + 0.55EqualEncouragement",
+    modelFormulaFive: "p_c = σ(b_c + Σ w_{c,k}(x_k − μ_k) + 0.38G_c + 0.26Sys_c + 0.38Dir_c)",
+    modelFormulaSix: "Final_c = 100 × p_c × (1 − 0.25A_category); ECCI = 100 × σ(0.18 + 2.45(S−P) − 0.48(BE−μ_BE) + 0.76(BR−μ_BR))",
+    modelSampleNote: "Current sample size: 31 responses. The model is intentionally regularized and conservative to avoid overfitting.",
+    simAcademicPerformance: "Past grades / performance",
+    simMajorPlan: "University or career plan",
+    simDifficulty: "Perceived course difficulty",
+    simParent: "Family expectation",
+    simTeacher: "Teacher advice",
+    simBiasHeard: "Heard gendered subject comments",
+    simBiasConfidence: "Stereotypes affect confidence",
+    simMinorityComfort: "Comfort as gender minority",
+    simEqualEncouragement: "Equal school encouragement",
+    simSupportControls: "Support forces",
+    simPressureControls: "Pressure forces",
+    simBiasControls: "Bias perception",
+    simProfileControls: "Student profile",
+    simCurriculumSystem: "Curriculum system",
+    simDirection: "Current course direction",
+    simDirectionStem: "STEM",
+    simDirectionHumanities: "Humanities",
+    simDirectionSocialScience: "Social Science",
+    simDirectionBusiness: "Business",
+    simDirectionMixed: "Mixed / Not sure",
+    simBiasExposure: "Bias exposure",
+    simBiasResistance: "Bias resistance",
     simulatorExplanationStrong:
       "The simulated environment looks relatively supportive. Interest, confidence, and school encouragement are strong enough to reduce the effect of stereotype pressure.",
     simulatorExplanationMiddle:
@@ -298,7 +347,7 @@ const translations = {
       "Objects appear in the room when the likelihood of choosing related subjects becomes higher.",
     simDeskComputer: "Computer",
     simPhysicsPoster: "Physics poster",
-    simBiologyPlant: "Biology plant",
+    simBiologyPlant: "Biology cell diagram",
     simBooks: "Books",
     simBusinessFolder: "Business folder",
     simSunlight: "Open atmosphere",
@@ -435,12 +484,12 @@ const translations = {
     navSimulator: "偏见模拟器",
     navFeedback: "反馈",
     welcome: "欢迎",
-    gateTitle: "进入网站前",
-    gateDescription: "请选择匿名浏览，或先填写一个简短问卷。",
-    anonymousTitle: "匿名浏览",
-    anonymousDesc: "不填写个人信息，直接进入网站。",
-    formEntryTitle: "填写问卷",
-    formEntryDesc: "回答三个简单问题后继续浏览。",
+    gateTitle: "继续浏览前",
+    gateDescription: "你已经浏览了模拟器和模型公式。你可以选择继续匿名浏览，或填写一个简短访客问卷来支持项目数据。",
+    anonymousTitle: "继续匿名浏览",
+    anonymousDesc: "不填写个人信息，继续浏览网站。",
+    formEntryTitle: "填写访客问卷",
+    formEntryDesc: "回答三个简单问题后继续浏览网站。",
     back: "返回",
     visitorForm: "访客问卷",
     formTitle: "请完成这个简短问卷",
@@ -456,6 +505,7 @@ const translations = {
     curriculumPlaceholder: "请选择你的课程体系",
     ap: "AP",
     ib: "IB",
+    ig: "IG",
     alevel: "A-Level",
     other: "其他",
     gender: "性别",
@@ -609,7 +659,55 @@ const translations = {
     simulatorLow: "偏见压力较高",
     simulatorHigh: "选课环境更开放",
     simulatorNotice:
-      "原型说明：当前权重仅用于演示。收集问卷数据后，可以根据真实回答重新调整模型。",
+      "本模拟器已根据 31 份匿名问卷回答进行校准。由于样本量仍然较小，结果应被理解为探索性估计，而不是最终预测。",
+    modelSectionLabel: "数学模型",
+    modelSectionTitle: "这个问卷模拟器如何计算结果",
+    modelSectionIntro:
+      "模拟器使用匿名化后的个体问卷数据，而不是只使用整体平均值。每一位答卷者都会成为一条数据记录，模型根据支持力量、压力力量、偏见暴露和偏见抵抗来估计不同课程的选择倾向。",
+    modelToggleOpen: "展开模型说明",
+    modelToggleClose: "收起模型说明",
+    modelDataTitle: "1. 个体层面数据",
+    modelDataText:
+      "模型使用 31 条清洗后的问卷记录。公开代码中不会嵌入个人标识、IP、提交时间、学校名称或开放题回答，只保留匿名数字特征。",
+    modelIndexTitle: "2. 指数构建",
+    modelIndexText:
+      "个人兴趣、自信心、成绩、大学规划、老师建议和学校鼓励构成支持指数；入门门槛、课程难度、家长期待、同伴影响和性别刻板印象影响构成压力指数；另外两个指数衡量偏见暴露和偏见抵抗。",
+    modelChoiceTitle: "3. 课程概率模型",
+    modelChoiceText:
+      "每一门课都先使用 Laplace 平滑得到基础概率，再根据模拟学生的指数、性别、课程体系和选课方向进行调整。这样模型输出的是多标签逻辑预测，而不是强制只选择一门课程。",
+    modelAvoidTitle: "4. 犹豫修正",
+    modelAvoidText:
+      "第 7 题关于是否犹豫或避免某类课程的回答被用于估计课程类别层面的犹豫风险。压力和偏见暴露较高会降低最终课程分数，而偏见抵抗可以缓冲这种影响。",
+    modelFormulaTitle: "核心公式",
+    modelFormulaOne: "x' = (x − 1) / 4，把 1–5 分量表归一化到 0–1",
+    modelFormulaTwo: "S = 0.22I + 0.18C + 0.17G + 0.17M + 0.10T + 0.16E_school",
+    modelFormulaThree: "P = 0.23Entry + 0.23Difficulty + 0.16Parent + 0.16Peer + 0.22Stereotype",
+    modelFormulaFour: "BE = 0.52Heard + 0.48ConfidenceEffect；BR = 0.45MinorityComfort + 0.55EqualEncouragement",
+    modelFormulaFive: "p_c = σ(b_c + Σ w_{c,k}(x_k − μ_k) + 0.38G_c + 0.26Sys_c + 0.38Dir_c)",
+    modelFormulaSix: "Final_c = 100 × p_c × (1 − 0.25A_category)；ECCI = 100 × σ(0.18 + 2.45(S−P) − 0.48(BE−μ_BE) + 0.76(BR−μ_BR))",
+    modelSampleNote: "当前样本量：31 份。为了避免过拟合，模型故意采用保守的正则化调整。",
+    simAcademicPerformance: "过去成绩 / 学术表现",
+    simMajorPlan: "大学或职业规划",
+    simDifficulty: "课程难度判断",
+    simParent: "家长期待",
+    simTeacher: "老师建议",
+    simBiasHeard: "听过学科性别化说法",
+    simBiasConfidence: "刻板印象影响自信",
+    simMinorityComfort: "作为性别少数时的舒适度",
+    simEqualEncouragement: "学校平等鼓励",
+    simSupportControls: "支持力量",
+    simPressureControls: "压力力量",
+    simBiasControls: "偏见感知",
+    simProfileControls: "学生画像",
+    simCurriculumSystem: "课程体系",
+    simDirection: "当前选课方向",
+    simDirectionStem: "STEM",
+    simDirectionHumanities: "人文学科",
+    simDirectionSocialScience: "社会科学",
+    simDirectionBusiness: "商科",
+    simDirectionMixed: "混合 / 不确定",
+    simBiasExposure: "偏见暴露",
+    simBiasResistance: "偏见抵抗",
     simulatorExplanationStrong:
       "模拟环境相对支持学生自由选课。兴趣、自信和学校鼓励较强，能够削弱刻板印象压力的影响。",
     simulatorExplanationMiddle:
@@ -644,7 +742,7 @@ const translations = {
       "随着不同课程选择可能性的变化，房间中会逐渐出现对应物品。",
     simDeskComputer: "电脑",
     simPhysicsPoster: "物理海报",
-    simBiologyPlant: "生物植物",
+    simBiologyPlant: "生物细胞结构图",
     simBooks: "书籍",
     simBusinessFolder: "商科文件夹",
     simSunlight: "开放氛围",
@@ -835,7 +933,7 @@ function CourseDataCard({ title, label, records, t }) {
           <h3 className="mt-1 text-xl font-bold text-neutral-900">{title}</h3>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {systems.map((system) => (
             <span
               key={system}
@@ -1010,221 +1108,292 @@ function RoomScene({
   courseScores,
   scenarioGender,
 }) {
-  const brightRoom = openExploration >= 65;
   const pressureDominant = pressureScore > supportScore;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
-  const revealStyle = (score, threshold = 55, delay = 0) => {
-    const visible = score >= threshold;
-    return {
-      opacity: visible ? 1 : 0.08,
-      transform: visible
-        ? "translate3d(0,0,0) scale(1)"
-        : "translate3d(0,12px,0) scale(0.94)",
-      filter: visible ? "blur(0px)" : "blur(3px)",
-      transition:
-        "opacity 650ms ease, transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 650ms ease",
-      transitionDelay: `${delay}ms`,
-    };
+  const nodeTone = (score) => {
+    if (score >= 70) return "high";
+    if (score >= 48) return "mid";
+    return "low";
   };
 
+  const statusTone =
+    openExploration >= 68
+      ? "Explorer Mode"
+      : openExploration >= 42
+        ? "Mixed Path"
+        : "Pressure Zone";
+
+  const scenarioNodes = [
+    {
+      key: "mathematics",
+      label: t.courseMathematics,
+      short: "Σ",
+      score: courseScores.mathematics,
+      x: 50,
+      y: 15,
+      color: "#f97316",
+      description: "logic path",
+    },
+    {
+      key: "physics",
+      label: t.coursePhysics,
+      short: "F",
+      score: courseScores.physics,
+      x: 74,
+      y: 20,
+      color: "#ea580c",
+      description: "force lab",
+    },
+    {
+      key: "computerScience",
+      label: t.courseComputerScience,
+      short: "CS",
+      score: courseScores.computerScience,
+      x: 84,
+      y: 48,
+      color: "#2563eb",
+      description: "code base",
+    },
+    {
+      key: "biology",
+      label: t.courseBiology,
+      short: "CELL",
+      score: courseScores.biology,
+      x: 70,
+      y: 78,
+      color: "#059669",
+      description: "life unit",
+    },
+    {
+      key: "chemistry",
+      label: t.courseChemistry,
+      short: "⚗",
+      score: courseScores.chemistry,
+      x: 30,
+      y: 78,
+      color: "#0f766e",
+      description: "reaction lab",
+    },
+    {
+      key: "economics",
+      label: t.courseEconomics,
+      short: "$",
+      score: courseScores.economics,
+      x: 16,
+      y: 50,
+      color: "#ca8a04",
+      description: "market route",
+    },
+    {
+      key: "geography",
+      label: t.courseGeography,
+      short: "MAP",
+      score: courseScores.geography,
+      x: 25,
+      y: 23,
+      color: "#0284c7",
+      description: "world tile",
+    },
+    {
+      key: "philosophy",
+      label: t.coursePhilosophy,
+      short: "?",
+      score: courseScores.philosophy,
+      x: 16,
+      y: 74,
+      color: "#7c3aed",
+      description: "idea tower",
+    },
+    {
+      key: "business",
+      label: t.courseBusiness,
+      short: "BIZ",
+      score: courseScores.business,
+      x: 86,
+      y: 74,
+      color: "#b45309",
+      description: "venture hub",
+    },
+  ];
+
+  const topCourses = [...scenarioNodes]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
+  const supportArc = clamp(supportScore, 0, 100);
+  const pressureArc = clamp(pressureScore, 0, 100);
+
   return (
-    <div className="rounded-3xl border border-orange-200 bg-white p-5 shadow-lg">
+    <div className="rounded-2xl border border-orange-200 bg-white p-3 shadow-lg">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-widest text-orange-800">
+          <p className="text-xs font-semibold uppercase tracking-widest text-orange-800">
             {t.simSceneTitle}
           </p>
-          <p className="mt-1 text-xs leading-6 text-neutral-500">{t.simSceneHint}</p>
+          <p className="mt-0.5 text-[11px] leading-5 text-neutral-500">
+            Strategic course-choice map driven by the survey model.
+          </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-900">
-            {openExploration}/100
+            ECCI {openExploration}/100
+          </span>
+          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
+            pressureDominant ? "bg-red-50 text-red-700" : "bg-emerald-50 text-emerald-700"
+          }`}>
+            {pressureDominant ? "Pressure lead" : "Support lead"}
           </span>
         </div>
       </div>
 
-      <div
-        className={`relative mt-4 h-[520px] overflow-hidden rounded-2xl border border-orange-100 transition-all duration-700 ${
-          brightRoom
-            ? "bg-gradient-to-b from-amber-50 via-orange-50 to-orange-100"
-            : "bg-gradient-to-b from-orange-100 via-orange-100 to-orange-200"
-        }`}
-      >
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-orange-200" />
-        <div className="absolute inset-x-0 bottom-40 h-[2px] bg-orange-300" />
-        <div className="absolute inset-x-0 bottom-0 h-40 room-floor-grid opacity-55" />
-        <div className="absolute bottom-8 left-[16%] right-[16%] h-16 rounded-full bg-orange-300/30 blur-2xl" />
+      <div className="scenario-map-field relative mt-2 h-[430px] overflow-hidden rounded-2xl border border-orange-100">
+        <div className="absolute inset-0 scenario-map-grid" />
+        <div className="absolute inset-0 scenario-map-vignette" />
         <div
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            pressureDominant ? "bg-orange-900/10" : "bg-transparent"
-          }`}
-        />
-
-        {/* Window and light */}
-        <div className="absolute left-6 top-8 h-32 w-[7.5rem] rounded-xl border-4 border-orange-200 bg-sky-100 shadow-inner">
-          <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-orange-200" />
-          <div className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-orange-200" />
-          <div
-            className="absolute left-4 top-5 h-10 w-10 rounded-full bg-yellow-300/80 blur-sm transition-all duration-700"
-            style={{ opacity: brightRoom ? 1 : 0.28 }}
-          />
-        </div>
-        <div
-          className="absolute left-12 top-32 h-44 w-64 rotate-12 bg-yellow-100/60 blur-2xl transition-all duration-700"
-          style={{ opacity: brightRoom ? 0.95 : 0.16 }}
-        />
-
-        {/* Clock */}
-        <div className="absolute left-44 top-10 h-14 w-14 rounded-full border-4 border-orange-200 bg-white shadow">
-          <div className="absolute left-1/2 top-1/2 h-4 w-[2px] -translate-x-1/2 -translate-y-full bg-orange-500" />
-          <div className="absolute left-1/2 top-1/2 h-[2px] w-4 bg-orange-500" />
-          <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500" />
-        </div>
-
-        {/* Study board: formulas only, no bar charts */}
-        <div className="absolute right-7 top-7 h-28 w-44 rounded-2xl border border-orange-200 bg-white/90 p-3 shadow-sm">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-orange-700">Study Board</span>
-            <span className="h-2 w-2 rounded-full bg-orange-300" />
-          </div>
-          <div style={revealStyle(courseScores.physics, 48, 80)}>
-            <div className="text-sm font-bold text-neutral-800">F = ma</div>
-            <div className="mt-1 h-1.5 w-20 rounded bg-orange-200" />
-          </div>
-          <div className="mt-3" style={revealStyle(courseScores.mathematics, 48, 140)}>
-            <div className="text-sm font-bold text-neutral-800">∫ f(x) dx</div>
-            <div className="mt-1 h-1.5 w-16 rounded bg-orange-200" />
-          </div>
-        </div>
-
-        {/* Geography map */}
-        <div
-          className="absolute right-12 top-[10.5rem] rounded-2xl border border-orange-200 bg-white/85 p-3 shadow-sm"
-          style={revealStyle(courseScores.geography, 50, 170)}
+          className="absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: pressureDominant ? 0.42 : 0.16 }}
         >
-          <div className="text-[10px] font-semibold text-neutral-500">{t.courseGeography}</div>
-          <div className="mt-2 h-16 w-28 rounded-xl border border-sky-200 bg-sky-100 p-2">
-            <div className="h-4 w-12 rounded-full bg-green-400" />
-            <div className="ml-10 mt-1 h-3 w-8 rounded-full bg-green-500" />
-            <div className="ml-3 mt-2 h-3 w-16 rounded-full bg-green-300" />
-          </div>
+          <div className="absolute -left-24 top-20 h-60 w-60 rounded-full bg-red-300/20 blur-3xl" />
+          <div className="absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-orange-300/25 blur-3xl" />
         </div>
 
-        {/* Shelf and books */}
-        <div className="absolute right-9 top-[16.7rem] h-3 w-48 rounded bg-orange-300 shadow-sm" />
-        <div
-          className="absolute right-24 top-[13.3rem] flex items-end gap-1"
-          style={revealStyle(courseScores.philosophy, 45, 110)}
-        >
-          <div className="h-9 w-4 rounded bg-orange-400" />
-          <div className="h-12 w-4 rounded bg-amber-500" />
-          <div className="h-8 w-4 rounded bg-yellow-600" />
-          <div className="h-11 w-4 rounded bg-stone-500" />
-          <div className="h-10 w-4 rounded bg-orange-700" />
-        </div>
-
-        {/* Side table for chemistry and biology */}
-        <div className="absolute left-8 top-[14.2rem] h-3 w-40 rounded bg-orange-300 shadow-sm" />
-        <div className="absolute left-12 top-[15rem] h-16 w-3 rounded bg-orange-400" />
-        <div className="absolute left-[9.4rem] top-[15rem] h-16 w-3 rounded bg-orange-400" />
-
-        <div
-          className="absolute left-12 top-[11.5rem] rounded-xl border border-orange-200 bg-white/85 px-3 py-2 shadow-sm"
-          style={revealStyle(courseScores.chemistry, 50, 130)}
-        >
-          <div className="text-[10px] font-semibold text-neutral-500">{t.courseChemistry}</div>
-          <div className="mt-2 flex items-end gap-2">
-            <div className="h-10 w-5 rounded-b-full border border-orange-300 bg-amber-100" />
-            <div className="h-8 w-5 rounded-b-full border border-orange-300 bg-green-100" />
-            <div className="h-6 w-6 rounded-full border border-orange-300 bg-sky-100" />
-          </div>
-        </div>
-
-        <div
-          className="absolute left-[8.6rem] top-[12rem]"
-          style={revealStyle(courseScores.biology, 48, 180)}
-        >
-          <div className="relative mx-auto h-12 w-16">
-            <div className="absolute left-2 top-4 h-5 w-8 -rotate-12 rounded-full bg-green-500" />
-            <div className="absolute right-1 top-0 h-6 w-8 rotate-12 rounded-full bg-green-600" />
-            <div className="absolute left-1/2 top-5 h-7 w-[3px] -translate-x-1/2 bg-green-800" />
-          </div>
-          <div className="mx-auto h-6 w-10 rounded-b-full bg-orange-500" />
-        </div>
-
-        {/* Business / economics represented as folders and coins, not charts */}
-        <div className="absolute left-[2.2rem] bottom-[5.2rem] h-24 w-28 rounded-2xl border border-orange-300 bg-orange-100 shadow-sm" />
-        <div
-          className="absolute left-[3.2rem] bottom-[9.7rem]"
-          style={revealStyle(courseScores.business, 46, 210)}
-        >
-          <div className="h-9 w-16 rounded-md border border-orange-300 bg-amber-100 shadow-sm">
-            <div className="ml-2 h-3 w-7 rounded-b bg-amber-200" />
-            <div className="mx-2 mt-2 h-1 rounded bg-orange-300" />
-          </div>
-        </div>
-        <div
-          className="absolute left-[6.7rem] bottom-[9.6rem] flex items-end gap-1"
-          style={revealStyle(courseScores.economics, 48, 240)}
-        >
-          <span className="h-5 w-5 rounded-full border border-amber-500 bg-amber-200" />
-          <span className="h-6 w-6 rounded-full border border-amber-500 bg-amber-300" />
-          <span className="h-4 w-4 rounded-full border border-amber-500 bg-amber-100" />
-        </div>
-
-        {/* Clean study desk: visual scenario now focuses only on subject-related objects */}
-        <div className="absolute left-1/2 bottom-[8.65rem] z-30 h-6 w-[21rem] -translate-x-1/2 rounded-t-xl bg-orange-400 shadow-md" />
-        <div className="absolute left-[calc(50%-150px)] bottom-10 z-20 h-24 w-4 rounded bg-orange-400" />
-        <div className="absolute left-[calc(50%+134px)] bottom-10 z-20 h-24 w-4 rounded bg-orange-400" />
-        <div className="absolute left-1/2 bottom-[9.8rem] z-30 h-4 w-[21rem] -translate-x-1/2 rounded bg-orange-300" />
-
-        {/* Laptop / CS */}
-        <div
-          className="absolute left-[calc(50%+42px)] bottom-[10.6rem] z-50"
-          style={revealStyle(courseScores.computerScience, 48, 120)}
-        >
-          <div className="h-[3.75rem] w-24 rounded-t-md border border-neutral-500 bg-neutral-800 shadow">
-            <div className="m-1.5 h-11 rounded bg-sky-200">
-              <div className="mx-auto pt-3 text-center text-xs font-bold text-sky-900">CS</div>
-            </div>
-          </div>
-          <div className="mx-auto h-2 w-28 rounded-b bg-neutral-600" />
-        </div>
-
-        {/* Notebook + calculator / Math */}
-        <div className="absolute left-[calc(50%-122px)] bottom-[10.8rem] z-50 h-5 w-24 rounded bg-white shadow">
-          <div className="mt-1 h-1 w-16 rounded bg-orange-200" />
-          <div className="mt-1 h-1 w-12 rounded bg-orange-200" />
-        </div>
-        <div
-          className="absolute left-[calc(50%-44px)] bottom-[10.8rem] z-50"
-          style={revealStyle(courseScores.mathematics, 52, 90)}
-        >
-          <div className="h-10 w-12 rounded-lg border border-orange-200 bg-white shadow-sm">
-            <div className="grid grid-cols-3 gap-[2px] p-1.5">
-              {Array.from({ length: 9 }).map((_, index) => (
-                <div key={index} className="h-1.5 rounded bg-orange-200" />
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Lamp */}
-        <div className="absolute right-28 bottom-[9.9rem] z-50">
-          <div className="relative h-[4.5rem] w-12">
-            <div className="absolute bottom-0 left-3 h-2 w-8 rounded-full bg-neutral-500" />
-            <div className="absolute bottom-2 left-6 h-9 w-[2px] bg-neutral-600" />
-            <div className="absolute bottom-10 left-2 h-2 w-8 rotate-[-35deg] rounded bg-neutral-600" />
-            <div className="absolute bottom-12 left-0 h-5 w-6 rounded-t-full rounded-b-md bg-neutral-700" />
-            <div
-              className="absolute bottom-7 left-0 h-12 w-12 rounded-full bg-yellow-100/70 blur-lg transition-all duration-700"
-              style={{ opacity: brightRoom ? 0.62 : 0.24 }}
+        <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {scenarioNodes.map((node) => (
+            <line
+              key={`line-${node.key}`}
+              x1="50"
+              y1="53"
+              x2={node.x}
+              y2={node.y}
+              stroke={node.color}
+              strokeWidth={0.22 + node.score / 120}
+              strokeLinecap="round"
+              strokeOpacity={0.16 + node.score / 145}
+              className="scenario-map-link"
             />
+          ))}
+          <circle
+            cx="50"
+            cy="53"
+            r="19"
+            fill="none"
+            stroke="#fed7aa"
+            strokeWidth="0.55"
+            strokeDasharray="2 2"
+            strokeOpacity="0.8"
+          />
+          <circle
+            cx="50"
+            cy="53"
+            r="24"
+            fill="none"
+            stroke="#fdba74"
+            strokeWidth="0.35"
+            strokeDasharray="1.2 2.6"
+            strokeOpacity="0.55"
+          />
+        </svg>
+
+        <div className="pointer-events-none absolute left-1/2 top-[53%] z-30 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/78 text-center shadow-xl backdrop-blur-xl">
+          <div className="absolute inset-2 rounded-full border border-orange-200/80" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400/14 via-white/40 to-amber-300/16" />
+          <div className="relative z-10">
+            <p className="text-[8px] font-black uppercase tracking-[0.2em] text-orange-700">Core</p>
+            <div className="mt-0.5 text-2xl font-black text-neutral-900">{openExploration}</div>
+            <p className="text-[8px] font-bold uppercase tracking-wider text-neutral-500">ECCI</p>
           </div>
         </div>
 
-        <div className="absolute left-5 bottom-40 z-50 max-w-[180px] rounded-2xl border border-orange-200 bg-white/90 px-4 py-2 text-sm font-semibold text-neutral-800 shadow transition-all duration-700">
-          {status}
+        {scenarioNodes.map((node) => {
+          const tone = nodeTone(node.score);
+          const active = node.score >= 55;
+          return (
+            <div
+              key={node.key}
+              className={`scenario-node scenario-node-${tone}`}
+              style={{
+                left: `${node.x}%`,
+                top: `${node.y}%`,
+                "--node-color": node.color,
+                "--node-score": `${node.score}%`,
+                "--node-glow": 0.12 + node.score / 150,
+              }}
+            >
+              <div className="scenario-node-glow" />
+              <div className="relative z-10 flex items-center gap-2">
+                <div className="scenario-node-token">{node.short}</div>
+                <div className="min-w-0 text-left">
+                  <p className="truncate text-[11px] font-black text-neutral-900">{node.label}</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-neutral-500">{node.description}</p>
+                </div>
+              </div>
+              <div className="relative z-10 mt-2 h-1.5 overflow-hidden rounded-full bg-white/70">
+                <div className="h-full rounded-full" style={{ width: `${node.score}%`, background: node.color }} />
+              </div>
+              <div className="relative z-10 mt-1 flex items-center justify-between text-[10px] font-black">
+                <span className={active ? "text-emerald-700" : "text-neutral-500"}>{active ? "ACTIVE" : "LOCKED"}</span>
+                <span style={{ color: node.color }}>{node.score}%</span>
+              </div>
+            </div>
+          );
+        })}
+
+      </div>
+
+      <div className="mt-3 grid gap-2 lg:grid-cols-[0.9fr_1.15fr_1fr]">
+        <div className="rounded-2xl border border-orange-100 bg-orange-50/70 p-3 shadow-sm">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-700">Decision Core</p>
+          <div className="mt-2 flex items-center justify-between gap-3">
+            <div>
+              <h4 className="text-sm font-black text-neutral-900">{status}</h4>
+              <p className="mt-0.5 text-[10px] font-semibold text-neutral-500">{statusTone}</p>
+            </div>
+            <span className={`rounded-full px-2.5 py-1 text-[10px] font-black ${
+              pressureDominant ? "bg-red-50 text-red-700" : "bg-emerald-50 text-emerald-700"
+            }`}>
+              {pressureDominant ? "Pressure lead" : "Support lead"}
+            </span>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-white px-2.5 py-2">
+              <div className="flex items-center justify-between text-[10px] font-black text-emerald-700">
+                <span>Support</span><span>{supportScore}%</span>
+              </div>
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-emerald-50">
+                <div className="h-full rounded-full bg-emerald-500" style={{ width: `${supportArc}%` }} />
+              </div>
+            </div>
+            <div className="rounded-xl bg-white px-2.5 py-2">
+              <div className="flex items-center justify-between text-[10px] font-black text-orange-700">
+                <span>Pressure</span><span>{pressureScore}%</span>
+              </div>
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-orange-50">
+                <div className="h-full rounded-full bg-orange-500" style={{ width: `${pressureArc}%` }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-orange-100 bg-white p-3 shadow-sm">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-700">Top unlocked paths</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {topCourses.map((course, index) => (
+              <span
+                key={course.key}
+                className="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-neutral-800"
+              >
+                #{index + 1} {course.label} · {course.score}%
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-orange-100 bg-white p-3 shadow-sm">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-orange-700">Scenario logic</p>
+          <p className="mt-1.5 text-[11px] leading-5 text-neutral-600">
+            Each zone is a course path. Higher model probability strengthens the route from the core and activates the zone.
+          </p>
         </div>
       </div>
     </div>
@@ -1237,7 +1406,7 @@ function NewsEvidenceSection({ t }) {
   return (
     <section
       id="news"
-      className="scroll-mt-28 rounded-3xl border border-orange-300/80 bg-white/90 p-8 shadow-xl backdrop-blur-sm transition duration-300 hover:-translate-y-1 md:p-10"
+      className="scroll-mt-24 rounded-3xl border border-orange-300/80 bg-white/90 p-5 shadow-xl backdrop-blur-sm transition duration-300 hover:-translate-y-1 md:p-6"
     >
       <div className="max-w-4xl">
         <p className="text-sm font-semibold uppercase tracking-widest text-orange-800">
@@ -1295,26 +1464,1355 @@ function NewsEvidenceSection({ t }) {
   );
 }
 
+
+const surveyModelResponses = [
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "AP",
+    "direction": "socialScience",
+    "avoided": "business",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 5,
+    "entry": 3,
+    "difficulty": 4,
+    "parent": 2,
+    "teacher": 2,
+    "peer": 2,
+    "stereotype": 3,
+    "school": 1,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 2,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "A-Level",
+    "direction": "mixed",
+    "avoided": "business",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 3,
+    "grades": 4,
+    "majorPlan": 4,
+    "entry": 3,
+    "difficulty": 5,
+    "parent": 2,
+    "teacher": 2,
+    "peer": 3,
+    "stereotype": 3,
+    "school": 3,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 3,
+    "equalEncouragement": 3
+  },
+  {
+    "grade": "10",
+    "gender": "nonBinary",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "socialScience",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 5,
+    "entry": 2,
+    "difficulty": 1,
+    "parent": 5,
+    "teacher": 1,
+    "peer": 5,
+    "stereotype": 5,
+    "school": 5,
+    "stereotypeHeard": 2,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 2,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "12",
+    "gender": "female",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "business",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 1
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 3,
+    "majorPlan": 2,
+    "entry": 2,
+    "difficulty": 3,
+    "parent": 3,
+    "teacher": 2,
+    "peer": 2,
+    "stereotype": 1,
+    "school": 3,
+    "stereotypeHeard": 2,
+    "stereotypeConfidence": 1,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "11",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "mixed",
+    "avoided": "stem",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 2,
+    "confidence": 3,
+    "grades": 5,
+    "majorPlan": 3,
+    "entry": 5,
+    "difficulty": 4,
+    "parent": 2,
+    "teacher": 4,
+    "peer": 2,
+    "stereotype": 1,
+    "school": 1,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 3,
+    "minorityComfort": 4,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 1,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 4,
+    "entry": 1,
+    "difficulty": 5,
+    "parent": 1,
+    "teacher": 4,
+    "peer": 3,
+    "stereotype": 2,
+    "school": 1,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 2,
+    "minorityComfort": 4,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "9",
+    "gender": "nonBinary",
+    "system": "Other",
+    "direction": "humanities",
+    "avoided": "humanities",
+    "courses": {
+      "mathematics": 0,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 1
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 1,
+    "difficulty": 1,
+    "parent": 1,
+    "teacher": 1,
+    "peer": 5,
+    "stereotype": 5,
+    "school": 1,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 2,
+    "confidence": 4,
+    "grades": 5,
+    "majorPlan": 1,
+    "entry": 1,
+    "difficulty": 5,
+    "parent": 3,
+    "teacher": 3,
+    "peer": 1,
+    "stereotype": 1,
+    "school": 1,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 5,
+    "difficulty": 5,
+    "parent": 5,
+    "teacher": 5,
+    "peer": 5,
+    "stereotype": 5,
+    "school": 5,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 4,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "nonBinary",
+    "system": "AP",
+    "direction": "stem",
+    "avoided": "other",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 1,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 3,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 3,
+    "difficulty": 3,
+    "parent": 5,
+    "teacher": 4,
+    "peer": 2,
+    "stereotype": 1,
+    "school": 4,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "AP",
+    "direction": "stem",
+    "avoided": "humanities",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 3,
+    "difficulty": 3,
+    "parent": 4,
+    "teacher": 4,
+    "peer": 4,
+    "stereotype": 4,
+    "school": 4,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 3,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "11",
+    "gender": "male",
+    "system": "AP",
+    "direction": "stem",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 1,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 4,
+    "entry": 1,
+    "difficulty": 3,
+    "parent": 2,
+    "teacher": 2,
+    "peer": 4,
+    "stereotype": 2,
+    "school": 3,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 3,
+    "equalEncouragement": 3
+  },
+  {
+    "grade": "10",
+    "gender": "nonBinary",
+    "system": "IB",
+    "direction": "stem",
+    "avoided": "stem",
+    "courses": {
+      "mathematics": 0,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 5,
+    "difficulty": 5,
+    "parent": 5,
+    "teacher": 5,
+    "peer": 5,
+    "stereotype": 5,
+    "school": 5,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "AP",
+    "direction": "mixed",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 1,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 3,
+    "majorPlan": 5,
+    "entry": 1,
+    "difficulty": 3,
+    "parent": 1,
+    "teacher": 2,
+    "peer": 1,
+    "stereotype": 1,
+    "school": 3,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "nonBinary",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "socialScience",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 1,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 4,
+    "entry": 3,
+    "difficulty": 5,
+    "parent": 2,
+    "teacher": 4,
+    "peer": 3,
+    "stereotype": 4,
+    "school": 4,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "AP",
+    "direction": "stem",
+    "avoided": "humanities",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 3,
+    "grades": 5,
+    "majorPlan": 4,
+    "entry": 3,
+    "difficulty": 2,
+    "parent": 3,
+    "teacher": 2,
+    "peer": 3,
+    "stereotype": 1,
+    "school": 1,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "IB",
+    "direction": "stem",
+    "avoided": "stem",
+    "courses": {
+      "mathematics": 0,
+      "physics": 0,
+      "chemistry": 1,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 1,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 4,
+    "grades": 5,
+    "majorPlan": 4,
+    "entry": 2,
+    "difficulty": 3,
+    "parent": 2,
+    "teacher": 2,
+    "peer": 2,
+    "stereotype": 3,
+    "school": 5,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 2,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "IB",
+    "direction": "socialScience",
+    "avoided": "business",
+    "courses": {
+      "mathematics": 1,
+      "physics": 0,
+      "chemistry": 1,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 3,
+    "confidence": 2,
+    "grades": 4,
+    "majorPlan": 4,
+    "entry": 4,
+    "difficulty": 3,
+    "parent": 4,
+    "teacher": 4,
+    "peer": 3,
+    "stereotype": 1,
+    "school": 3,
+    "stereotypeHeard": 3,
+    "stereotypeConfidence": 3,
+    "minorityComfort": 3,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "A-Level",
+    "direction": "socialScience",
+    "avoided": "humanities",
+    "courses": {
+      "mathematics": 1,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 2,
+    "majorPlan": 4,
+    "entry": 3,
+    "difficulty": 2,
+    "parent": 2,
+    "teacher": 2,
+    "peer": 2,
+    "stereotype": 2,
+    "school": 3,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 2,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "humanities",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 1,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 5,
+    "grades": 4,
+    "majorPlan": 5,
+    "entry": 2,
+    "difficulty": 4,
+    "parent": 1,
+    "teacher": 2,
+    "peer": 3,
+    "stereotype": 2,
+    "school": 4,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 2,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "AP",
+    "direction": "socialScience",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 1,
+      "geography": 1,
+      "philosophy": 1
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 2,
+    "difficulty": 3,
+    "parent": 2,
+    "teacher": 2,
+    "peer": 2,
+    "stereotype": 5,
+    "school": 5,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 1,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "11",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "stem",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 3,
+    "majorPlan": 5,
+    "entry": 1,
+    "difficulty": 1,
+    "parent": 3,
+    "teacher": 2,
+    "peer": 1,
+    "stereotype": 1,
+    "school": 4,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 5,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "AP",
+    "direction": "stem",
+    "avoided": "stem",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 1,
+      "computerScience": 1,
+      "economics": 1,
+      "business": 0,
+      "geography": 1,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 4,
+    "entry": 2,
+    "difficulty": 2,
+    "parent": 3,
+    "teacher": 4,
+    "peer": 2,
+    "stereotype": 1,
+    "school": 2,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "IB",
+    "direction": "mixed",
+    "avoided": "other",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 5,
+    "majorPlan": 5,
+    "entry": 2,
+    "difficulty": 3,
+    "parent": 1,
+    "teacher": 1,
+    "peer": 1,
+    "stereotype": 1,
+    "school": 5,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 1,
+    "minorityComfort": 4,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "11",
+    "gender": "male",
+    "system": "IB",
+    "direction": "humanities",
+    "avoided": "stem",
+    "courses": {
+      "mathematics": 1,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 5,
+    "entry": 2,
+    "difficulty": 3,
+    "parent": 3,
+    "teacher": 1,
+    "peer": 2,
+    "stereotype": 2,
+    "school": 3,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "AP",
+    "direction": "mixed",
+    "avoided": "other",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 1,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 5,
+    "entry": 3,
+    "difficulty": 4,
+    "parent": 5,
+    "teacher": 4,
+    "peer": 3,
+    "stereotype": 1,
+    "school": 3,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 4,
+    "minorityComfort": 5,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "IB",
+    "direction": "socialScience",
+    "avoided": "humanities",
+    "courses": {
+      "mathematics": 1,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 5,
+    "grades": 3,
+    "majorPlan": 4,
+    "entry": 2,
+    "difficulty": 4,
+    "parent": 2,
+    "teacher": 3,
+    "peer": 2,
+    "stereotype": 1,
+    "school": 3,
+    "stereotypeHeard": 4,
+    "stereotypeConfidence": 1,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "11",
+    "gender": "male",
+    "system": "A-Level",
+    "direction": "socialScience",
+    "avoided": "none",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 5,
+    "grades": 3,
+    "majorPlan": 4,
+    "entry": 2,
+    "difficulty": 2,
+    "parent": 1,
+    "teacher": 3,
+    "peer": 3,
+    "stereotype": 1,
+    "school": 4,
+    "stereotypeHeard": 5,
+    "stereotypeConfidence": 5,
+    "minorityComfort": 5,
+    "equalEncouragement": 5
+  },
+  {
+    "grade": "10",
+    "gender": "female",
+    "system": "IB",
+    "direction": "socialScience",
+    "avoided": "business",
+    "courses": {
+      "mathematics": 1,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 1,
+      "computerScience": 0,
+      "economics": 1,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 4,
+    "confidence": 2,
+    "grades": 4,
+    "majorPlan": 4,
+    "entry": 3,
+    "difficulty": 4,
+    "parent": 3,
+    "teacher": 4,
+    "peer": 3,
+    "stereotype": 2,
+    "school": 4,
+    "stereotypeHeard": 1,
+    "stereotypeConfidence": 2,
+    "minorityComfort": 4,
+    "equalEncouragement": 4
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "Other",
+    "direction": "mixed",
+    "avoided": "business",
+    "courses": {
+      "mathematics": 0,
+      "physics": 0,
+      "chemistry": 0,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 1
+    },
+    "interest": 4,
+    "confidence": 3,
+    "grades": 3,
+    "majorPlan": 2,
+    "entry": 2,
+    "difficulty": 2,
+    "parent": 3,
+    "teacher": 2,
+    "peer": 2,
+    "stereotype": 2,
+    "school": 3,
+    "stereotypeHeard": 3,
+    "stereotypeConfidence": 3,
+    "minorityComfort": 3,
+    "equalEncouragement": 3
+  },
+  {
+    "grade": "10",
+    "gender": "male",
+    "system": "AP",
+    "direction": "mixed",
+    "avoided": "other",
+    "courses": {
+      "mathematics": 1,
+      "physics": 1,
+      "chemistry": 1,
+      "biology": 0,
+      "computerScience": 0,
+      "economics": 0,
+      "business": 0,
+      "geography": 0,
+      "philosophy": 0
+    },
+    "interest": 5,
+    "confidence": 4,
+    "grades": 4,
+    "majorPlan": 2,
+    "entry": 2,
+    "difficulty": 2,
+    "parent": 1,
+    "teacher": 2,
+    "peer": 3,
+    "stereotype": 3,
+    "school": 4,
+    "stereotypeHeard": 2,
+    "stereotypeConfidence": 3,
+    "minorityComfort": 4,
+    "equalEncouragement": 5
+  }
+];
+
+const surveyCourseModels = [
+  { key: "mathematics", labelKey: "courseMathematics", category: "stem" },
+  { key: "physics", labelKey: "coursePhysics", category: "stem" },
+  { key: "chemistry", labelKey: "courseChemistry", category: "stem" },
+  { key: "biology", labelKey: "courseBiology", category: "stem" },
+  { key: "computerScience", labelKey: "courseComputerScience", category: "stem" },
+  { key: "economics", labelKey: "courseEconomics", category: "socialScience" },
+  { key: "business", labelKey: "courseBusiness", category: "business" },
+  { key: "geography", labelKey: "courseGeography", category: "socialScience" },
+  { key: "philosophy", labelKey: "coursePhilosophy", category: "humanities" },
+];
+
+const surveyModelFeatureKeys = ["support", "pressure", "biasExposure", "biasResistance"];
+
+function clampNumber(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function safeMean(values, fallback = 0) {
+  if (!values.length) return fallback;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function sigmoid(value) {
+  return 1 / (1 + Math.exp(-value));
+}
+
+function logit(probability) {
+  const safeProbability = clampNumber(probability, 0.001, 0.999);
+  return Math.log(safeProbability / (1 - safeProbability));
+}
+
+function normalizeSurveyRating(value) {
+  return clampNumber((Number(value) - 1) / 4, 0, 1);
+}
+
+function weightedFeatureAverage(pairs) {
+  const totalWeight = pairs.reduce((sum, [, weight]) => sum + weight, 0);
+  if (!totalWeight) return 0;
+  return pairs.reduce((sum, [value, weight]) => sum + normalizeSurveyRating(value) * weight, 0) / totalWeight;
+}
+
+function getSurveyFeatureVector(record) {
+  const support = weightedFeatureAverage([
+    [record.interest, 0.22],
+    [record.confidence, 0.18],
+    [record.grades, 0.17],
+    [record.majorPlan, 0.17],
+    [record.teacher, 0.10],
+    [record.school, 0.16],
+  ]);
+
+  const pressure = weightedFeatureAverage([
+    [record.entry, 0.23],
+    [record.difficulty, 0.23],
+    [record.parent, 0.16],
+    [record.peer, 0.16],
+    [record.stereotype, 0.22],
+  ]);
+
+  const biasExposure = weightedFeatureAverage([
+    [record.stereotypeHeard, 0.52],
+    [record.stereotypeConfidence, 0.48],
+  ]);
+
+  const biasResistance = weightedFeatureAverage([
+    [record.minorityComfort, 0.45],
+    [record.equalEncouragement, 0.55],
+  ]);
+
+  return { support, pressure, biasExposure, biasResistance };
+}
+
+function smoothedGroupLogit(records, predicate, selectedCourseKey, baselineLogitValue) {
+  const group = records.filter(predicate);
+  if (!group.length) return 0;
+  const chosen = group.filter((record) => record.courses[selectedCourseKey] === 1).length;
+  const probability = (chosen + 1) / (group.length + 2);
+  return (logit(probability) - baselineLogitValue) * Math.min(0.42, group.length / records.length);
+}
+
+function buildSurveyChoiceModel(records) {
+  const enriched = records.map((record) => ({
+    ...record,
+    features: getSurveyFeatureVector(record),
+  }));
+
+  const means = Object.fromEntries(
+    surveyModelFeatureKeys.map((key) => [key, safeMean(enriched.map((record) => record.features[key]))]),
+  );
+
+  const deviations = Object.fromEntries(
+    surveyModelFeatureKeys.map((key) => [
+      key,
+      Math.sqrt(safeMean(enriched.map((record) => (record.features[key] - means[key]) ** 2), 0.08 ** 2)) || 0.08,
+    ]),
+  );
+
+  const avoidedCategories = ["stem", "humanities", "socialScience", "business", "other"];
+  const avoidanceModels = Object.fromEntries(
+    avoidedCategories.map((category) => {
+      const avoidedCount = enriched.filter((record) => record.avoided === category).length;
+      const probability = (avoidedCount + 1) / (enriched.length + 2);
+      return [category, { baseLogit: logit(probability), observedProbability: probability }];
+    }),
+  );
+
+  const courses = Object.fromEntries(
+    surveyCourseModels.map((course) => {
+      const selected = enriched.filter((record) => record.courses[course.key] === 1);
+      const notSelected = enriched.filter((record) => record.courses[course.key] !== 1);
+      const probability = (selected.length + 1) / (enriched.length + 2);
+      const baseline = logit(probability);
+      const balanceShrink = Math.min(selected.length, notSelected.length) / Math.max(1, enriched.length / 2);
+      const shrinkage = clampNumber(balanceShrink * 0.56, 0.08, 0.56);
+
+      const featureWeights = Object.fromEntries(
+        surveyModelFeatureKeys.map((key) => {
+          if (!selected.length || !notSelected.length) return [key, 0];
+          const selectedMean = safeMean(selected.map((record) => record.features[key]), means[key]);
+          const notSelectedMean = safeMean(notSelected.map((record) => record.features[key]), means[key]);
+          const standardizedDifference = (selectedMean - notSelectedMean) / (deviations[key] + 0.15);
+          return [key, clampNumber(standardizedDifference * shrinkage, -0.85, 0.85)];
+        }),
+      );
+
+      const genderEffects = Object.fromEntries(
+        ["male", "female", "nonBinary"].map((gender) => [
+          gender,
+          smoothedGroupLogit(enriched, (record) => record.gender === gender, course.key, baseline),
+        ]),
+      );
+
+      const systemEffects = Object.fromEntries(
+        ["AP", "IB", "A-Level", "Other"].map((system) => [
+          system,
+          smoothedGroupLogit(enriched, (record) => record.system === system, course.key, baseline),
+        ]),
+      );
+
+      const directionEffects = Object.fromEntries(
+        ["stem", "humanities", "socialScience", "business", "mixed"].map((direction) => [
+          direction,
+          smoothedGroupLogit(enriched, (record) => record.direction === direction, course.key, baseline),
+        ]),
+      );
+
+      return [
+        course.key,
+        {
+          ...course,
+          selectedCount: selected.length,
+          observedProbability: selected.length / enriched.length,
+          baseline,
+          featureWeights,
+          genderEffects,
+          systemEffects,
+          directionEffects,
+        },
+      ];
+    }),
+  );
+
+  return {
+    sampleSize: enriched.length,
+    means,
+    deviations,
+    courses,
+    avoidanceModels,
+  };
+}
+
+function predictSurveyCourseScores(model, inputs, profile) {
+  const featureVector = getSurveyFeatureVector(inputs);
+  const supportScore = Math.round(featureVector.support * 100);
+  const pressureScore = Math.round(featureVector.pressure * 100);
+  const biasExposureScore = Math.round(featureVector.biasExposure * 100);
+  const biasResistanceScore = Math.round(featureVector.biasResistance * 100);
+
+  const getAvoidanceRisk = (category) => {
+    const modelForCategory = model.avoidanceModels[category] || model.avoidanceModels.other;
+    const z =
+      modelForCategory.baseLogit +
+      1.05 * (featureVector.pressure - model.means.pressure) +
+      0.68 * (featureVector.biasExposure - model.means.biasExposure) -
+      0.78 * (featureVector.biasResistance - model.means.biasResistance);
+    return sigmoid(z);
+  };
+
+  const courseOutlook = surveyCourseModels.map((course) => {
+    const courseModel = model.courses[course.key];
+    const empiricalAdjustment = surveyModelFeatureKeys.reduce((sum, key) => {
+      return sum + courseModel.featureWeights[key] * (featureVector[key] - model.means[key]);
+    }, 0);
+
+    const interactionAdjustment =
+      (courseModel.genderEffects[profile.gender] || 0) * 0.38 +
+      (courseModel.systemEffects[profile.system] || 0) * 0.26 +
+      (courseModel.directionEffects[profile.direction] || 0) * 0.38;
+
+    const rawProbability = sigmoid(courseModel.baseline + empiricalAdjustment + interactionAdjustment);
+    const avoidanceRisk = getAvoidanceRisk(course.category);
+    const finalProbability = clampNumber(rawProbability * (1 - 0.25 * avoidanceRisk), 0.03, 0.97);
+
+    return {
+      ...course,
+      score: Math.round(finalProbability * 100),
+      observedProbability: courseModel.observedProbability,
+      selectedCount: courseModel.selectedCount,
+      avoidanceRisk: Math.round(avoidanceRisk * 100),
+    };
+  });
+
+  const ecci = Math.round(
+    clampNumber(
+      sigmoid(
+        0.18 +
+          2.45 * (featureVector.support - featureVector.pressure) -
+          0.48 * (featureVector.biasExposure - model.means.biasExposure) +
+          0.76 * (featureVector.biasResistance - model.means.biasResistance),
+      ) * 100,
+      6,
+      94,
+    ),
+  );
+
+  const stemCourses = courseOutlook.filter((course) => course.category === "stem");
+  const humanitiesCourses = courseOutlook.filter((course) => course.category === "humanities");
+  const socialScienceCourses = courseOutlook.filter((course) => course.category === "socialScience");
+
+  return {
+    supportScore,
+    pressureScore,
+    biasExposureScore,
+    biasResistanceScore,
+    openExploration: ecci,
+    stemWillingness: Math.round(safeMean(stemCourses.map((course) => course.score), ecci)),
+    humanitiesWillingness: Math.round(safeMean(humanitiesCourses.map((course) => course.score), ecci)),
+    socialScienceWillingness: Math.round(safeMean(socialScienceCourses.map((course) => course.score), ecci)),
+    courseOutlook,
+  };
+}
+
 function BiasSimulator({ t }) {
   const defaultInputs = {
     interest: 4,
-    confidence: 3,
+    confidence: 4,
+    grades: 4,
+    majorPlan: 4,
     entry: 3,
+    difficulty: 3,
+    parent: 2,
+    teacher: 3,
     peer: 3,
-    stereotype: 3,
+    stereotype: 2,
     school: 4,
+    stereotypeHeard: 4,
+    stereotypeConfidence: 4,
+    minorityComfort: 4,
+    equalEncouragement: 4,
   };
 
   const [inputs, setInputs] = useState(defaultInputs);
   const [scenarioGender, setScenarioGender] = useState("female");
+  const [scenarioSystem, setScenarioSystem] = useState("AP");
+  const [scenarioDirection, setScenarioDirection] = useState("stem");
 
-  const sliderItems = [
-    ["interest", t.simInterest, "positive"],
-    ["confidence", t.simConfidence, "positive"],
-    ["entry", t.simEntry, "negative"],
-    ["peer", t.simPeer, "negative"],
-    ["stereotype", t.simStereotype, "negative"],
-    ["school", t.simSchool, "positive"],
+  const surveyChoiceModel = useMemo(
+    () => buildSurveyChoiceModel(surveyModelResponses),
+    [],
+  );
+
+  const prediction = useMemo(
+    () =>
+      predictSurveyCourseScores(surveyChoiceModel, inputs, {
+        gender: scenarioGender,
+        system: scenarioSystem,
+        direction: scenarioDirection,
+      }),
+    [inputs, scenarioGender, scenarioSystem, scenarioDirection, surveyChoiceModel],
+  );
+
+  const sliderGroups = [
+    {
+      title: t.simSupportControls,
+      direction: "positive",
+      icon: "▲",
+      signal: "+ RESOURCE",
+      items: [
+        ["interest", t.simInterest],
+        ["confidence", t.simConfidence],
+        ["grades", t.simAcademicPerformance],
+        ["majorPlan", t.simMajorPlan],
+        ["teacher", t.simTeacher],
+        ["school", t.simSchool],
+      ],
+    },
+    {
+      title: t.simPressureControls,
+      direction: "negative",
+      icon: "◆",
+      signal: "- THREAT",
+      items: [
+        ["entry", t.simEntry],
+        ["difficulty", t.simDifficulty],
+        ["parent", t.simParent],
+        ["peer", t.simPeer],
+        ["stereotype", t.simStereotype],
+      ],
+    },
+    {
+      title: t.simBiasControls,
+      direction: "mixed",
+      icon: "◈",
+      signal: "AWARENESS",
+      items: [
+        ["stereotypeHeard", t.simBiasHeard],
+        ["stereotypeConfidence", t.simBiasConfidence],
+        ["minorityComfort", t.simMinorityComfort],
+        ["equalEncouragement", t.simEqualEncouragement],
+      ],
+    },
   ];
 
   const genderOptions = [
@@ -1323,134 +2821,82 @@ function BiasSimulator({ t }) {
     ["nonBinary", t.nonBinary],
   ];
 
+  const systemOptions = [
+    ["AP", t.ap],
+    ["IB", t.ib],
+    ["IG", t.ig],
+    ["A-Level", t.alevel],
+    ["Other", t.other],
+  ];
+
+  const directionOptions = [
+    ["stem", t.simDirectionStem],
+    ["humanities", t.simDirectionHumanities],
+    ["socialScience", t.simDirectionSocialScience],
+    ["business", t.simDirectionBusiness],
+    ["mixed", t.simDirectionMixed],
+  ];
+
   const presets = [
     {
       label: t.simPresetBalanced,
-      values: { interest: 4, confidence: 3, entry: 3, peer: 3, stereotype: 3, school: 4 },
+      values: { ...defaultInputs, interest: 4, confidence: 4, grades: 4, majorPlan: 4, entry: 3, difficulty: 3, peer: 3, stereotype: 2, school: 4 },
       gender: "female",
+      system: "AP",
+      direction: "mixed",
     },
     {
       label: t.simPresetPressure,
-      values: { interest: 4, confidence: 2, entry: 5, peer: 4, stereotype: 5, school: 2 },
+      values: { ...defaultInputs, interest: 4, confidence: 2, grades: 3, majorPlan: 4, entry: 5, difficulty: 5, parent: 4, peer: 4, stereotype: 5, school: 2, stereotypeHeard: 5, stereotypeConfidence: 5, minorityComfort: 2, equalEncouragement: 2 },
       gender: "female",
+      system: "AP",
+      direction: "stem",
     },
     {
       label: t.simPresetSupport,
-      values: { interest: 4, confidence: 4, entry: 2, peer: 2, stereotype: 2, school: 5 },
+      values: { ...defaultInputs, interest: 5, confidence: 5, grades: 5, majorPlan: 5, entry: 2, difficulty: 2, parent: 2, peer: 2, stereotype: 1, school: 5, stereotypeHeard: 3, stereotypeConfidence: 2, minorityComfort: 5, equalEncouragement: 5 },
       gender: "male",
+      system: "IB",
+      direction: "stem",
     },
     {
       label: t.simPresetStereotype,
-      values: { interest: 3, confidence: 2, entry: 3, peer: 5, stereotype: 5, school: 2 },
+      values: { ...defaultInputs, interest: 3, confidence: 2, grades: 3, majorPlan: 3, entry: 3, difficulty: 4, parent: 4, peer: 5, stereotype: 5, school: 2, stereotypeHeard: 5, stereotypeConfidence: 5, minorityComfort: 2, equalEncouragement: 3 },
       gender: "nonBinary",
+      system: "A-Level",
+      direction: "humanities",
     },
   ];
 
-  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-  const toPercent = (value) => Math.round((value / 15) * 100);
-
-  const supportScore = toPercent(inputs.interest + inputs.confidence + inputs.school);
-  const pressureScore = toPercent(inputs.entry + inputs.peer + inputs.stereotype);
-
-  const openExploration = Math.round(
-    clamp(52 + (supportScore - pressureScore) * 0.42, 8, 94),
-  );
-
-  const stemWillingness = Math.round(
-    clamp(
-      48 +
-        (inputs.interest - 3) * 7 +
-        (inputs.confidence - 3) * 8 +
-        (inputs.school - 3) * 5 -
-        (inputs.entry - 3) * 7 -
-        (inputs.stereotype - 3) * 8 -
-        (inputs.peer - 3) * 3,
-      6,
-      94,
-    ),
-  );
-
-  const humanitiesWillingness = Math.round(
-    clamp(
-      54 +
-        (inputs.interest - 3) * 5 +
-        (inputs.confidence - 3) * 3 +
-        (inputs.school - 3) * 4 -
-        (inputs.peer - 3) * 2 -
-        (inputs.stereotype - 3) * 3,
-      8,
-      92,
-    ),
-  );
-
-  const status =
-    openExploration >= 68
-      ? t.simStatusSupported
-      : openExploration >= 42
-        ? t.simStatusMixed
-        : t.simStatusBlocked;
-
-  const explanation =
-    openExploration >= 68
-      ? t.simulatorExplanationStrong
-      : openExploration >= 42
-        ? t.simulatorExplanationMiddle
-        : t.simulatorExplanationWeak;
-
-  const courseOutlook = [
-    {
-      key: "mathematics",
-      label: t.courseMathematics,
-      score: stemWillingness + inputs.confidence * 3 - inputs.entry * 4,
-    },
-    {
-      key: "physics",
-      label: t.coursePhysics,
-      score: stemWillingness - inputs.entry * 4 - inputs.stereotype * 2,
-    },
-    {
-      key: "chemistry",
-      label: t.courseChemistry,
-      score: Math.round((stemWillingness + inputs.confidence * 12) / 2) - inputs.entry * 2,
-    },
-    {
-      key: "computerScience",
-      label: t.courseComputerScience,
-      score: stemWillingness - inputs.stereotype * 4 - inputs.peer * 2,
-    },
-    {
-      key: "biology",
-      label: t.courseBiology,
-      score: Math.round((stemWillingness + openExploration) / 2) + 6,
-    },
-    {
-      key: "economics",
-      label: t.courseEconomics,
-      score: Math.round((humanitiesWillingness + stemWillingness) / 2) + inputs.interest * 2,
-    },
-    {
-      key: "geography",
-      label: t.courseGeography,
-      score: humanitiesWillingness + inputs.school * 2 - inputs.peer,
-    },
-    {
-      key: "philosophy",
-      label: t.coursePhilosophy,
-      score: humanitiesWillingness + inputs.school * 2 - inputs.peer,
-    },
-    {
-      key: "business",
-      label: t.courseBusiness,
-      score: Math.round((humanitiesWillingness + openExploration) / 2),
-    },
-  ].map((course) => ({
-    ...course,
-    score: clamp(Math.round(course.score), 5, 95),
-  }));
+  const {
+    supportScore,
+    pressureScore,
+    biasExposureScore,
+    biasResistanceScore,
+    openExploration,
+    stemWillingness,
+    humanitiesWillingness,
+    socialScienceWillingness,
+    courseOutlook,
+  } = prediction;
 
   const courseScores = Object.fromEntries(
     courseOutlook.map((course) => [course.key, course.score]),
   );
+
+  const status =
+    openExploration >= 70
+      ? t.simStatusSupported
+      : pressureScore > supportScore + 18
+        ? t.simStatusBlocked
+        : t.simStatusMixed;
+
+  const explanation =
+    openExploration >= 70
+      ? t.simulatorExplanationStrong
+      : pressureScore > supportScore + 18
+        ? t.simulatorExplanationWeak
+        : t.simulatorExplanationMiddle;
 
   const getCourseStatus = (score) => {
     if (score >= 66) return t.simLikelyChoose;
@@ -1462,14 +2908,44 @@ function BiasSimulator({ t }) {
     setInputs((prev) => ({ ...prev, [key]: Number(value) }));
   };
 
+  const formatSliderValue = (value) => Number(value).toFixed(2);
+  const getSliderLevel = (value) => {
+    const numericValue = Number(value);
+    if (numericValue >= 4.35) return "S";
+    if (numericValue >= 3.65) return "A";
+    if (numericValue >= 2.85) return "B";
+    if (numericValue >= 2.05) return "C";
+    return "D";
+  };
+  const getSliderPercent = (value) => `${((Number(value) - 1) / 4) * 100}%`;
+  const getGroupAverage = (items) =>
+    items.reduce((sum, [key]) => sum + Number(inputs[key]), 0) / items.length;
+
   const ResultCard = ({ label, value }) => (
-    <div className="rounded-2xl border border-orange-100 bg-orange-50/70 p-4">
-      <span className="text-xs font-semibold uppercase tracking-wide text-orange-800">{label}</span>
-      <div className="mt-2 flex items-end gap-1">
-        <span className="text-3xl font-bold text-neutral-900">{value}</span>
-        <span className="mb-1 text-sm font-semibold text-neutral-500">%</span>
+    <div className="rounded-xl border border-orange-100 bg-orange-50/70 p-2.5">
+      <span className="text-[10px] font-semibold uppercase tracking-wide text-orange-800">{label}</span>
+      <div className="mt-1 flex items-end gap-1">
+        <span className="text-xl font-bold text-neutral-900">{value}</span>
+        <span className="mb-0.5 text-xs font-semibold text-neutral-500">%</span>
       </div>
     </div>
+  );
+
+  const ProfileSelect = ({ label, value, onChange, options }) => (
+    <label className="block rounded-lg border border-orange-100 bg-white p-2 shadow-sm">
+      <span className="text-[10px] font-semibold text-neutral-800">{label}</span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="mt-1 w-full rounded-lg border border-orange-200 bg-orange-50 px-1.5 py-1 text-[10px] font-semibold text-neutral-800 outline-none transition focus:border-orange-500"
+      >
+        {options.map(([optionValue, optionLabel]) => (
+          <option key={optionValue} value={optionValue}>
+            {optionLabel}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 
   return (
@@ -1481,22 +2957,29 @@ function BiasSimulator({ t }) {
         <p className="text-sm font-semibold uppercase tracking-widest text-orange-800">
           {t.simulatorLabel}
         </p>
-        <h3 className="mt-3 text-3xl font-bold text-neutral-900">
+        <h3 className="mt-2 text-2xl font-bold text-neutral-900 md:text-3xl">
           {t.simulatorTitle}
         </h3>
-        <p className="mt-4 leading-8 text-neutral-800">{t.simulatorDesc}</p>
+        <p className="mt-2 text-sm leading-6 text-neutral-800">{t.simulatorDesc}</p>
       </div>
 
-      <div className="mt-6 rounded-3xl border border-orange-200 bg-orange-50/60 p-4">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm font-semibold text-neutral-900">{t.simPresets}</p>
+      <div className="strategy-command-card mt-3 rounded-2xl border border-orange-200 bg-orange-50/60 p-2.5">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <p className="text-xs font-semibold text-neutral-900">{t.simPresets}</p>
+            <p className="mt-0.5 text-[10px] leading-4 text-neutral-500">
+              {t.modelSampleNote}
+            </p>
+          </div>
           <button
             type="button"
             onClick={() => {
               setInputs(defaultInputs);
               setScenarioGender("female");
+              setScenarioSystem("AP");
+              setScenarioDirection("stem");
             }}
-            className="rounded-full border border-orange-200 bg-white px-3 py-1.5 text-xs font-semibold text-orange-900 transition hover:bg-orange-100"
+            className="rounded-full border border-orange-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-orange-900 transition hover:bg-orange-100"
           >
             {t.simReset}
           </button>
@@ -1509,8 +2992,10 @@ function BiasSimulator({ t }) {
               onClick={() => {
                 setInputs(preset.values);
                 setScenarioGender(preset.gender);
+                setScenarioSystem(preset.system);
+                setScenarioDirection(preset.direction);
               }}
-              className="rounded-full border border-orange-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 transition hover:border-orange-500 hover:bg-orange-100"
+              className="strategy-preset rounded-full border border-orange-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-neutral-700 transition hover:border-orange-500 hover:bg-orange-100"
             >
               {preset.label}
             </button>
@@ -1518,27 +3003,27 @@ function BiasSimulator({ t }) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
-        <div className="space-y-4">
-          <div className="rounded-2xl border border-orange-100 bg-white p-4 shadow-sm">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <span className="text-sm font-semibold text-neutral-800">{t.gender}</span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-900">
+      <div className="mt-3 grid gap-3 xl:grid-cols-[0.58fr_1.42fr] 2xl:grid-cols-[0.52fr_1.48fr]">
+        <div className="min-w-0 space-y-2">
+          <div className="strategy-profile-card rounded-xl border border-orange-100 bg-white p-2 shadow-sm">
+            <div className="mb-1.5 flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-neutral-800">{t.simProfileControls}</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-semibold text-orange-900">
                 <img
                   src={genderAvatarIcons[scenarioGender]}
                   alt=""
-                  className="h-6 w-6 rounded-full object-cover ring-1 ring-orange-100"
+                  className="h-4 w-4 rounded-full object-cover ring-1 ring-orange-100"
                 />
                 {scenarioGender === "female" ? t.female : scenarioGender === "male" ? t.male : t.nonBinary}
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-1.5">
               {genderOptions.map(([value, label]) => (
                 <button
                   key={value}
                   type="button"
                   onClick={() => setScenarioGender(value)}
-                  className={`group rounded-2xl border px-2.5 py-3 text-xs font-semibold transition ${
+                  className={`strategy-token group rounded-lg border px-1.5 py-1.5 text-[10px] font-semibold transition ${
                     scenarioGender === value
                       ? "border-orange-600 bg-orange-600 text-white shadow-md"
                       : "border-orange-200 bg-orange-50 text-orange-900 hover:border-orange-400 hover:bg-orange-100"
@@ -1547,7 +3032,7 @@ function BiasSimulator({ t }) {
                   <img
                     src={genderAvatarIcons[value]}
                     alt=""
-                    className={`mx-auto mb-2 h-14 w-14 rounded-full object-cover transition ${
+                    className={`mx-auto mb-1 h-6 w-6 rounded-full object-cover transition ${
                       scenarioGender === value
                         ? "ring-2 ring-white"
                         : "ring-1 ring-orange-200 group-hover:ring-orange-400"
@@ -1559,36 +3044,79 @@ function BiasSimulator({ t }) {
             </div>
           </div>
 
-          {sliderItems.map(([key, label, direction]) => (
-            <label
-              key={key}
-              className="block rounded-2xl border border-orange-100 bg-white p-4 shadow-sm"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-sm font-semibold text-neutral-800">{label}</span>
-                <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                    direction === "positive"
-                      ? "bg-green-50 text-green-700"
-                      : "bg-orange-100 text-orange-800"
-                  }`}
-                >
-                  {inputs[key]}/5
-                </span>
+          <div className="grid grid-cols-2 gap-2">
+            <ProfileSelect
+              label={t.simCurriculumSystem}
+              value={scenarioSystem}
+              onChange={setScenarioSystem}
+              options={systemOptions}
+            />
+            <ProfileSelect
+              label={t.simDirection}
+              value={scenarioDirection}
+              onChange={setScenarioDirection}
+              options={directionOptions}
+            />
+          </div>
+
+          {sliderGroups.map((group) => {
+            const groupAverage = getGroupAverage(group.items);
+            return (
+              <div key={group.title} className={`strategy-control-bank strategy-${group.direction} rounded-xl border border-orange-100 bg-white p-2 shadow-sm`}>
+                <div className="mb-1.5 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="strategy-bank-icon flex h-7 w-7 items-center justify-center rounded-lg text-sm font-black">
+                      {group.icon}
+                    </span>
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-wide text-neutral-900">{group.title}</p>
+                      <p className="text-[9px] font-bold tracking-[0.18em] text-neutral-500">{group.signal}</p>
+                    </div>
+                  </div>
+                  <span className="strategy-bank-level rounded-full px-2 py-0.5 text-[10px] font-black">
+                    LV {formatSliderValue(groupAverage)}
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 xl:grid-cols-2">
+                  {group.items.map(([key, label]) => {
+                    const currentValue = inputs[key];
+                    const sliderPercent = getSliderPercent(currentValue);
+                    return (
+                      <label key={key} className="strategy-slider-card block rounded-lg border border-orange-100 bg-orange-50/50 px-1.5 py-1.5">
+                        <div className="flex items-start justify-between gap-1.5">
+                          <div className="min-w-0">
+                            <span className="block truncate text-[11px] font-black leading-3.5 text-neutral-800">{label}</span>
+                            <div className="mt-1 h-1 overflow-hidden rounded-full bg-white/80">
+                              <div
+                                className="strategy-mini-energy h-full rounded-full transition-all duration-300"
+                                style={{ width: sliderPercent }}
+                              />
+                            </div>
+                          </div>
+                          <span className="strategy-level-badge shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-black">
+                            {getSliderLevel(currentValue)} · {formatSliderValue(currentValue)}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="1"
+                          max="5"
+                          step="0.01"
+                          value={currentValue}
+                          onChange={(e) => handleInputChange(key, e.target.value)}
+                          className="survey-range strategy-range mt-1.5 w-full"
+                          style={{ "--value": sliderPercent }}
+                        />
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
-              <input
-                type="range"
-                min="1"
-                max="5"
-                value={inputs[key]}
-                onChange={(e) => handleInputChange(key, e.target.value)}
-                className="mt-3 w-full accent-orange-600"
-              />
-            </label>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="space-y-4">
+        <div className="min-w-0 space-y-2">
           <RoomScene
             t={t}
             status={status}
@@ -1599,13 +3127,13 @@ function BiasSimulator({ t }) {
             scenarioGender={scenarioGender}
           />
 
-          <div className="grid gap-3 md:grid-cols-2">
-            <div className="rounded-2xl border border-green-100 bg-green-50 p-4">
+          <div className="grid gap-2 md:grid-cols-2">
+            <div className="rounded-xl border border-green-100 bg-green-50 p-2.5">
               <div className="flex items-center justify-between text-sm font-semibold text-green-800">
                 <span>{t.simSupport}</span>
                 <span>{supportScore}%</span>
               </div>
-              <div className="mt-3 h-3 overflow-hidden rounded-full bg-white">
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
                 <div
                   className="h-full rounded-full bg-green-600 transition-all duration-500"
                   style={{ width: `${supportScore}%` }}
@@ -1613,43 +3141,75 @@ function BiasSimulator({ t }) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-orange-100 bg-orange-50 p-4">
+            <div className="rounded-xl border border-orange-100 bg-orange-50 p-2.5">
               <div className="flex items-center justify-between text-sm font-semibold text-orange-800">
                 <span>{t.simPressure}</span>
                 <span>{pressureScore}%</span>
               </div>
-              <div className="mt-3 h-3 overflow-hidden rounded-full bg-white">
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
                 <div
                   className="h-full rounded-full bg-orange-600 transition-all duration-500"
                   style={{ width: `${pressureScore}%` }}
                 />
               </div>
             </div>
+
+            <div className="rounded-xl border border-sky-100 bg-sky-50 p-2.5">
+              <div className="flex items-center justify-between text-sm font-semibold text-sky-800">
+                <span>{t.simBiasExposure}</span>
+                <span>{biasExposureScore}%</span>
+              </div>
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
+                <div
+                  className="h-full rounded-full bg-sky-600 transition-all duration-500"
+                  style={{ width: `${biasExposureScore}%` }}
+                />
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-2.5">
+              <div className="flex items-center justify-between text-sm font-semibold text-emerald-800">
+                <span>{t.simBiasResistance}</span>
+                <span>{biasResistanceScore}%</span>
+              </div>
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white">
+                <div
+                  className="h-full rounded-full bg-emerald-600 transition-all duration-500"
+                  style={{ width: `${biasResistanceScore}%` }}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-2 md:grid-cols-3">
             <ResultCard label={t.simStem} value={stemWillingness} />
             <ResultCard label={t.simHumanities} value={humanitiesWillingness} />
-            <ResultCard label={t.simOpenExploration} value={openExploration} />
+            <ResultCard label={t.categorySocialScience} value={socialScienceWillingness} />
           </div>
 
-          <div className="rounded-3xl border border-orange-200 bg-white p-5 shadow-lg">
+          <div className="grid gap-2 md:grid-cols-3">
+            <ResultCard label={t.simOpenExploration} value={openExploration} />
+            <ResultCard label={t.simBiasExposure} value={biasExposureScore} />
+            <ResultCard label={t.simBiasResistance} value={biasResistanceScore} />
+          </div>
+
+          <div className="rounded-2xl border border-orange-200 bg-white p-3 shadow-lg">
             <p className="text-sm font-semibold uppercase tracking-widest text-orange-800">
               {t.simCourseOutlook}
             </p>
-            <div className="mt-4 grid gap-2 md:grid-cols-2">
+            <div className="mt-2 grid max-h-[205px] gap-1.5 overflow-y-auto pr-1 md:grid-cols-2">
               {courseOutlook.map((course) => (
                 <div
                   key={course.key}
-                  className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-2xl border border-orange-100 bg-orange-50/60 px-4 py-3"
+                  className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-xl border border-orange-100 bg-orange-50/60 px-2.5 py-2"
                 >
                   <div>
-                    <span className="text-sm font-semibold text-neutral-900">{course.label}</span>
-                    <p className="mt-1 text-xs font-medium text-neutral-500">
-                      {getCourseStatus(course.score)}
+                    <span className="text-xs font-semibold text-neutral-900">{t[course.labelKey]}</span>
+                    <p className="mt-0.5 text-[10px] font-medium text-neutral-500">
+                      {getCourseStatus(course.score)} · {course.selectedCount}/{surveyChoiceModel.sampleSize}
                     </p>
                   </div>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-orange-900">
+                  <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-orange-900">
                     {course.score}%
                   </span>
                 </div>
@@ -1657,15 +3217,141 @@ function BiasSimulator({ t }) {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-orange-100 bg-orange-50 p-4 text-sm leading-7 text-neutral-800">
+          <div className="rounded-xl border border-orange-100 bg-orange-50 p-2.5 text-xs leading-5 text-neutral-800">
             {explanation}
           </div>
 
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-6 text-neutral-700">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-2.5 text-[10px] leading-5 text-neutral-700">
             {t.simulatorNotice}
           </div>
         </div>
       </div>
+    </section>
+  );
+}
+
+function ModelExplanationSection({ t }) {
+  const [isOpen, setIsOpen] = useState(true);
+  const isZh = t.langButton === "English";
+
+  const modelCards = [
+    [t.modelDataTitle, t.modelDataText],
+    [t.modelIndexTitle, t.modelIndexText],
+    [t.modelChoiceTitle, t.modelChoiceText],
+    [t.modelAvoidTitle, t.modelAvoidText],
+  ];
+
+  const FormulaBlock = ({ title, children, note }) => (
+    <article className="rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-4 shadow-sm">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <h5 className="text-xs font-bold uppercase tracking-[0.18em] text-orange-800">{title}</h5>
+        <span className="h-2 w-2 rounded-full bg-orange-400" />
+      </div>
+      <div className="overflow-x-auto rounded-xl border border-orange-100 bg-white px-4 py-3">
+        <div className="min-w-max whitespace-nowrap font-serif text-[1.05rem] leading-8 text-neutral-900">
+          {children}
+        </div>
+      </div>
+      {note && <p className="mt-3 text-xs leading-6 text-neutral-600">{note}</p>}
+    </article>
+  );
+
+  return (
+    <section id="model-explanation" className="scroll-mt-28 rounded-3xl border border-orange-300/80 bg-white/90 p-8 shadow-xl backdrop-blur-sm md:p-10">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="max-w-4xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-orange-800">
+            {t.modelSectionLabel}
+          </p>
+          <h3 className="mt-3 text-3xl font-bold text-neutral-900 md:text-4xl">
+            {t.modelSectionTitle}
+          </h3>
+          <p className="mt-4 leading-8 text-neutral-800">{t.modelSectionIntro}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="rounded-full border border-orange-300 bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-900 transition hover:bg-orange-100"
+        >
+          {isOpen ? t.modelToggleClose : t.modelToggleOpen}
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="mt-7 space-y-5">
+          <div className="grid gap-4 md:grid-cols-2">
+            {modelCards.map(([title, text]) => (
+              <article key={title} className="rounded-2xl border border-orange-100 bg-orange-50/70 p-5">
+                <h4 className="text-base font-bold text-neutral-900">{title}</h4>
+                <p className="mt-3 text-sm leading-7 text-neutral-700">{text}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="rounded-2xl border border-orange-200 bg-white p-5">
+            <h4 className="text-base font-bold text-neutral-900">{t.modelFormulaTitle}</h4>
+            <p className="mt-2 text-sm leading-7 text-neutral-600">
+              {isZh
+                ? "下面的公式已经改成网页可直接阅读的数学表达，不再显示 LaTeX 源码。"
+                : "The formulas below are rendered as readable web math instead of raw LaTeX source."}
+            </p>
+
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
+              <FormulaBlock
+                title={isZh ? "1. 量表归一化" : "1. Scale normalization"}
+                note={isZh ? "把所有 1–5 分量表转成 0–1 区间，方便不同变量放在同一模型中比较。" : "Converts every 1–5 survey scale into a 0–1 range."}
+              >
+                <span>x<sup>′</sup> = </span>
+                <span className="inline-flex flex-col items-center align-middle">
+                  <span className="border-b border-neutral-800 px-2">x − 1</span>
+                  <span className="px-2">4</span>
+                </span>
+              </FormulaBlock>
+
+              <FormulaBlock
+                title={isZh ? "2. 支持指数" : "2. Support Index"}
+                note={isZh ? "I=兴趣，C=自信，G=成绩，M=规划，T=老师建议，Eschool=学校鼓励。" : "I=interest, C=confidence, G=grades, M=major plan, T=teacher advice, Eschool=school encouragement."}
+              >
+                <span>S = 0.22I + 0.18C + 0.17G + 0.17M + 0.10T + 0.16E<sub>school</sub></span>
+              </FormulaBlock>
+
+              <FormulaBlock
+                title={isZh ? "3. 压力指数" : "3. Pressure Index"}
+                note={isZh ? "Entry=入门门槛，Difficulty=难度，Parent=家长期待，Peer=同伴影响，Stereotype=性别刻板印象。" : "Entry, difficulty, family expectation, peer influence, and stereotype pressure form the pressure side."}
+              >
+                <span>P = 0.23Entry + 0.23Difficulty + 0.16Parent + 0.16Peer + 0.22Stereotype</span>
+              </FormulaBlock>
+
+              <FormulaBlock
+                title={isZh ? "4. 偏见暴露与抵抗" : "4. Bias Exposure and Resistance"}
+                note={isZh ? "BE 衡量接触到偏见的程度；BR 衡量学生和学校环境抵抗偏见的能力。" : "BE measures exposure to stereotypes; BR measures resistance from confidence and school support."}
+              >
+                <div>BE = 0.52Heard + 0.48ConfidenceEffect</div>
+                <div>BR = 0.45MinorityComfort + 0.55EqualEncouragement</div>
+              </FormulaBlock>
+
+              <FormulaBlock
+                title={isZh ? "5. 课程选择概率" : "5. Course-choice probability"}
+                note={isZh ? "每一门课都有自己的基础概率和权重，输出为选择该课程的概率。" : "Each course has its own baseline and weights, producing a probability of choosing that course."}
+              >
+                <span>p<sub>c</sub> = σ( b<sub>c</sub> + Σ w<sub>c,k</sub>(x<sub>k</sub> − μ<sub>k</sub>) + 0.38G<sub>c</sub> + 0.26Sys<sub>c</sub> + 0.38Dir<sub>c</sub> )</span>
+              </FormulaBlock>
+
+              <FormulaBlock
+                title={isZh ? "6. 最终课程分数与 ECCI" : "6. Final score and ECCI"}
+                note={isZh ? "最终课程分数会受到犹豫/避免风险修正；ECCI 用于表示整体开放选课程度。" : "Final course score is adjusted by avoidance risk; ECCI summarizes overall openness of course choice."}
+              >
+                <div>Final<sub>c</sub> = 100 × p<sub>c</sub> × (1 − 0.25A<sub>category</sub>)</div>
+                <div>ECCI = 100 × σ(0.18 + 2.45(S − P) − 0.48(BE − μ<sub>BE</sub>) + 0.76(BR − μ<sub>BR</sub>))</div>
+              </FormulaBlock>
+            </div>
+
+            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-6 text-neutral-700">
+              {t.modelSampleNote}
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -1758,6 +3444,7 @@ function VisitorForm({ t, visitorInfo, onChange, canContinue, onBack, onContinue
               <option value="">{t.curriculumPlaceholder}</option>
               <option value="AP">{t.ap}</option>
               <option value="IB">{t.ib}</option>
+              <option value="IG">{t.ig}</option>
               <option value="A-Level">{t.alevel}</option>
               <option value="Other">{t.other}</option>
             </select>
@@ -1994,6 +3681,255 @@ function FloatingBackground() {
           }
         }
 
+
+        .site-zoom-90 {
+          zoom: 0.9;
+        }
+
+        @supports not (zoom: 0.9) {
+          .site-zoom-90 {
+            transform: scale(0.9);
+            transform-origin: top center;
+            width: 111.111%;
+            margin-left: -5.555%;
+          }
+        }
+
+        .strategy-command-card,
+        .strategy-profile-card,
+        .strategy-control-bank {
+          position: relative;
+          overflow: hidden;
+          background:
+            linear-gradient(135deg, rgba(255, 247, 237, 0.96), rgba(255, 255, 255, 0.94)),
+            radial-gradient(circle at 12% 0%, rgba(251, 146, 60, 0.18), transparent 34%);
+        }
+
+        .strategy-command-card::before,
+        .strategy-profile-card::before,
+        .strategy-control-bank::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background-image:
+            linear-gradient(rgba(154, 52, 18, 0.055) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(154, 52, 18, 0.055) 1px, transparent 1px);
+          background-size: 18px 18px;
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 84%);
+        }
+
+        .strategy-preset,
+        .strategy-reset,
+        .strategy-token {
+          position: relative;
+          overflow: hidden;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 3px 10px rgba(154, 52, 18, 0.08);
+        }
+
+        .strategy-preset::after,
+        .strategy-reset::after,
+        .strategy-token::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+          transform: translateX(-120%);
+          transition: transform 500ms ease;
+        }
+
+        .strategy-preset:hover::after,
+        .strategy-reset:hover::after,
+        .strategy-token:hover::after {
+          transform: translateX(120%);
+        }
+
+        .strategy-control-bank {
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 8px 18px rgba(154, 52, 18, 0.07);
+        }
+
+        .strategy-bank-icon {
+          color: #ffffff;
+          background: linear-gradient(135deg, #f97316, #9a3412);
+          box-shadow: 0 5px 12px rgba(154, 52, 18, 0.18);
+        }
+
+        .strategy-positive .strategy-bank-icon,
+        .strategy-positive .strategy-mini-energy {
+          background: linear-gradient(135deg, #22c55e, #15803d);
+        }
+
+        .strategy-negative .strategy-bank-icon,
+        .strategy-negative .strategy-mini-energy {
+          background: linear-gradient(135deg, #fb923c, #c2410c);
+        }
+
+        .strategy-mixed .strategy-bank-icon,
+        .strategy-mixed .strategy-mini-energy {
+          background: linear-gradient(135deg, #38bdf8, #0369a1);
+        }
+
+        .strategy-bank-level,
+        .strategy-level-badge {
+          color: #7c2d12;
+          background: rgba(255, 255, 255, 0.82);
+          border: 1px solid rgba(251, 146, 60, 0.32);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .strategy-slider-card {
+          position: relative;
+          overflow: hidden;
+          background:
+            linear-gradient(135deg, rgba(255, 247, 237, 0.88), rgba(255, 255, 255, 0.86));
+          transition:
+            transform 180ms ease,
+            border-color 180ms ease,
+            box-shadow 180ms ease,
+            background 180ms ease;
+        }
+
+        .strategy-slider-card:hover {
+          transform: translateY(-1px);
+          border-color: rgba(249, 115, 22, 0.45);
+          background: rgba(255, 255, 255, 0.96);
+          box-shadow: 0 6px 16px rgba(154, 52, 18, 0.10);
+        }
+
+        .survey-range {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 0.76rem;
+          cursor: pointer;
+          background: transparent;
+          accent-color: #ea580c;
+          --value: 50%;
+        }
+
+        .survey-range::-webkit-slider-runnable-track {
+          height: 0.3rem;
+          border-radius: 999px;
+          background:
+            linear-gradient(90deg, #f97316 0%, #fb923c var(--value), #fed7aa var(--value), #ffedd5 100%);
+          box-shadow: inset 0 1px 2px rgba(154, 52, 18, 0.18), 0 0 0 1px rgba(251, 146, 60, 0.16);
+        }
+
+        .survey-range::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 0.68rem;
+          width: 0.98rem;
+          margin-top: -0.19rem;
+          border-radius: 999px;
+          background: linear-gradient(135deg, #fff7ed, #f97316 45%, #9a3412);
+          border: 1.5px solid #ffffff;
+          box-shadow: 0 2px 6px rgba(154, 52, 18, 0.35), 0 0 0 2px rgba(251, 146, 60, 0.12);
+        }
+
+        .survey-range::-moz-range-track {
+          height: 0.3rem;
+          border-radius: 999px;
+          background:
+            linear-gradient(90deg, #f97316 0%, #fb923c var(--value), #fed7aa var(--value), #ffedd5 100%);
+          box-shadow: inset 0 1px 2px rgba(154, 52, 18, 0.18), 0 0 0 1px rgba(251, 146, 60, 0.16);
+        }
+
+        .survey-range::-moz-range-thumb {
+          height: 0.68rem;
+          width: 0.98rem;
+          border-radius: 999px;
+          background: linear-gradient(135deg, #fff7ed, #f97316 45%, #9a3412);
+          border: 1.5px solid #ffffff;
+          box-shadow: 0 2px 6px rgba(154, 52, 18, 0.35), 0 0 0 2px rgba(251, 146, 60, 0.12);
+        }
+
+
+        .scenario-map-field {
+          background:
+            radial-gradient(circle at 50% 48%, rgba(255,255,255,0.88), rgba(255,247,237,0.52) 28%, transparent 48%),
+            radial-gradient(circle at 72% 22%, rgba(255, 237, 213, 0.95), transparent 30%),
+            linear-gradient(135deg, #fff7ed, #fed7aa 48%, #ffedd5);
+        }
+
+        .scenario-map-grid {
+          background-image:
+            linear-gradient(to right, rgba(154, 52, 18, 0.08) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(154, 52, 18, 0.08) 1px, transparent 1px),
+            radial-gradient(circle, rgba(154,52,18,0.12) 1px, transparent 1.2px);
+          background-size: 34px 34px, 34px 34px, 18px 18px;
+          mask-image: radial-gradient(circle at 50% 52%, black 0%, black 72%, transparent 100%);
+        }
+
+        .scenario-map-vignette {
+          background:
+            linear-gradient(to bottom, rgba(255,255,255,0.22), transparent 22%, rgba(154,52,18,0.08)),
+            radial-gradient(circle at 50% 55%, transparent 0%, transparent 48%, rgba(124,45,18,0.12) 100%);
+        }
+
+        .scenario-map-link {
+          filter: drop-shadow(0 2px 4px rgba(154, 52, 18, 0.16));
+          transition: stroke-opacity 500ms ease, stroke-width 500ms ease;
+        }
+
+        .scenario-node {
+          position: absolute;
+          z-index: 20;
+          width: 8.6rem;
+          transform: translate(-50%, -50%);
+          border: 1px solid rgba(255,255,255,0.72);
+          border-radius: 1.25rem;
+          padding: 0.5rem;
+          background: rgba(255,255,255,0.82);
+          box-shadow: 0 10px 24px rgba(154, 52, 18, 0.12), inset 0 1px 0 rgba(255,255,255,0.78);
+          backdrop-filter: blur(14px);
+          transition: transform 240ms ease, box-shadow 240ms ease, opacity 240ms ease, filter 240ms ease;
+        }
+
+        .scenario-node:hover {
+          transform: translate(-50%, -50%) scale(1.04);
+          box-shadow: 0 14px 30px rgba(154, 52, 18, 0.18), 0 0 0 1px rgba(249,115,22,0.16);
+        }
+
+        .scenario-node-low {
+          opacity: 0.58;
+          filter: saturate(0.72);
+        }
+
+        .scenario-node-mid {
+          opacity: 0.88;
+        }
+
+        .scenario-node-high {
+          opacity: 1;
+          box-shadow: 0 16px 34px rgba(154, 52, 18, 0.18), 0 0 24px rgba(249, 115, 22, 0.22);
+        }
+
+        .scenario-node-token {
+          display: flex;
+          height: 2.2rem;
+          min-width: 2.2rem;
+          align-items: center;
+          justify-content: center;
+          border-radius: 0.85rem;
+          color: white;
+          font-size: 0.72rem;
+          font-weight: 900;
+          letter-spacing: -0.02em;
+          background: linear-gradient(135deg, var(--node-color), #7c2d12);
+          box-shadow: 0 6px 14px rgba(154, 52, 18, 0.18);
+        }
+
+        .scenario-node-glow {
+          position: absolute;
+          inset: -1rem;
+          z-index: 0;
+          border-radius: 1.6rem;
+          background: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.24), transparent 66%);
+          opacity: var(--node-glow, 0.42);
+          pointer-events: none;
+        }
+
         .visitor-form-panel {
           max-height: 80vh;
         }
@@ -2033,8 +3969,9 @@ function FloatingBackground() {
 
 export default function GenderBiasCourseSelectionWebsite() {
   const [lang, setLang] = useState("en");
-  const [showGate, setShowGate] = useState(true);
+  const [showGate, setShowGate] = useState(false);
   const [gateMode, setGateMode] = useState("choice");
+  const [visitorPromptTriggered, setVisitorPromptTriggered] = useState(false);
   const [visitorInfo, setVisitorInfo] = useState({
     school: "",
     grade: "",
@@ -2273,13 +4210,40 @@ export default function GenderBiasCourseSelectionWebsite() {
   };
 
   useEffect(() => {
+    if (visitorPromptTriggered) return;
+
+    const triggerVisitorPromptAfterModelSection = () => {
+      const modelSection = document.getElementById("model-explanation");
+      if (!modelSection) return;
+
+      const rect = modelSection.getBoundingClientRect();
+      const hasFinishedModelSection = rect.bottom < window.innerHeight * 0.78;
+
+      if (hasFinishedModelSection) {
+        setGateMode("choice");
+        setShowGate(true);
+        setVisitorPromptTriggered(true);
+      }
+    };
+
+    window.addEventListener("scroll", triggerVisitorPromptAfterModelSection, { passive: true });
+    window.addEventListener("resize", triggerVisitorPromptAfterModelSection);
+    triggerVisitorPromptAfterModelSection();
+
+    return () => {
+      window.removeEventListener("scroll", triggerVisitorPromptAfterModelSection);
+      window.removeEventListener("resize", triggerVisitorPromptAfterModelSection);
+    };
+  }, [visitorPromptTriggered]);
+
+  useEffect(() => {
     if (submitState !== "success") return;
     const timer = window.setTimeout(() => setSubmitState("idle"), 3000);
     return () => window.clearTimeout(timer);
   }, [submitState]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden gender-page-bg text-neutral-800">
+    <div className="site-zoom-90 relative min-h-screen overflow-hidden gender-page-bg text-neutral-800">
       <FloatingBackground />
 
       {showGate && (
@@ -2514,6 +4478,8 @@ export default function GenderBiasCourseSelectionWebsite() {
 
         <BiasSimulator t={t} />
 
+        <ModelExplanationSection t={t} />
+
         <section
           id="feedback"
           className="scroll-mt-28 rounded-3xl border border-orange-300/80 bg-white/90 p-8 shadow-xl backdrop-blur-sm transition duration-300 hover:-translate-y-1 md:p-10"
@@ -2616,9 +4582,10 @@ export default function GenderBiasCourseSelectionWebsite() {
                             type="range"
                             min="1"
                             max="5"
+                            step="0.01"
                             value={reflectionSurvey.factors[key]}
                             onChange={(e) => handleSurveyScaleChange("factors", key, e.target.value)}
-                            className="mt-3 w-full accent-orange-600"
+                            className="survey-range mt-1.5 w-full"
                           />
                           <div className="mt-1 flex justify-between text-[11px] text-neutral-500">
                             <span>{t.scaleLow}</span>
@@ -2644,9 +4611,10 @@ export default function GenderBiasCourseSelectionWebsite() {
                             type="range"
                             min="1"
                             max="5"
+                            step="0.01"
                             value={reflectionSurvey.statements[key]}
                             onChange={(e) => handleSurveyScaleChange("statements", key, e.target.value)}
-                            className="mt-3 w-full accent-orange-600"
+                            className="survey-range mt-1.5 w-full"
                           />
                           <div className="mt-1 flex justify-between text-[11px] text-neutral-500">
                             <span>{t.stronglyDisagree}</span>
